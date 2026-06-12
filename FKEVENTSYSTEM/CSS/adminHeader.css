@@ -1,0 +1,485 @@
+/* ================= ADMIN HEADER ================= */
+
+.admin-navbar {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 42px;
+
+    position: relative;
+
+    z-index: 100;
+}
+
+/* ================= LEFT ================= */
+
+.admin-nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.admin-nav-left a {
+    text-decoration: none;
+}
+
+.admin-nav-left i {
+    font-size: 34px;
+
+    color: black;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.admin-nav-left i:hover {
+    transform: scale(1.08);
+}
+
+/* ================= CENTER ================= */
+
+.admin-nav-center {
+    display: flex;
+    align-items: center;
+
+    gap: 55px;
+}
+
+/* NAV LINK */
+
+.admin-nav-center a {
+    text-decoration: none;
+
+    color: white;
+
+    font-size: 17px;
+    font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 18px;
+
+    border-radius: 14px;
+
+    transition: 0.3s ease;
+}
+
+/* ICON */
+
+.admin-nav-center a i {
+    font-size: 19px;
+
+    color: black;
+}
+
+/* HOVER */
+
+.admin-nav-center a:hover {
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    transform: translateY(-2px);
+}
+
+/* ================= CLUB NAV DROPDOWN (HOVER) ================= */
+
+.admin-nav-dropdown {
+    position: relative;
+}
+
+.admin-nav-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: white;
+    font-size: 17px;
+    font-weight: 500;
+
+    padding: 10px 18px;
+    border-radius: 14px;
+
+    cursor: pointer;
+    user-select: none;
+
+    transition: 0.3s ease;
+}
+
+.admin-nav-dropdown-toggle i.bi-suit-club-fill,
+.admin-nav-dropdown-toggle i.bi-grid {
+    font-size: 19px;
+    color: black;
+}
+
+.admin-nav-chevron {
+    font-size: 12px;
+    color: black;
+    transition: transform 0.3s ease;
+}
+
+.admin-nav-dropdown.is-open .admin-nav-dropdown-toggle,
+.admin-nav-dropdown.is-active .admin-nav-dropdown-toggle {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+.admin-nav-dropdown.is-open .admin-nav-chevron,
+.admin-nav-dropdown.is-active .admin-nav-chevron {
+    transform: rotate(180deg);
+}
+
+.admin-nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    min-width: 240px;
+
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+
+    border-radius: 16px;
+    padding: 8px;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+
+    display: none;
+    z-index: 1000;
+
+    animation: dropdownAnimation 0.25s ease;
+}
+
+.admin-nav-dropdown.is-open .admin-nav-dropdown-menu {
+    display: block;
+}
+
+.admin-nav-dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    text-decoration: none;
+    color: #1a1a1a;
+
+    padding: 12px 14px;
+    border-radius: 12px;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    transition: 0.25s ease;
+}
+
+.admin-nav-dropdown-menu a i {
+    font-size: 17px;
+    color: #6d28ff;
+}
+
+.admin-nav-dropdown-menu a:hover,
+.admin-nav-dropdown-menu a.active-sub-nav {
+    background: #f0ebff;
+    color: #6d28ff;
+}
+
+/* ================= RIGHT ================= */
+
+.admin-nav-right {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+}
+
+/* NOTIFICATION */
+
+.notification-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-icon i {
+    font-size: 24px;
+
+    color: black;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.notification-icon i:hover {
+    transform: translateY(-2px);
+}
+
+/* ================= PROFILE ================= */
+
+.admin-profile-dropdown {
+    position: relative;
+}
+
+/* BUTTON */
+
+.admin-profile-btn {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    cursor: pointer;
+}
+
+/* PROFILE CIRCLE */
+
+.admin-profile-circle {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    border: 2px solid black;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: 0.3s;
+}
+
+/* HOVER */
+
+.admin-profile-circle:hover {
+    background:
+        rgba(255, 255, 255, 0.12);
+}
+
+/* ICON */
+
+.admin-profile-circle i {
+    font-size: 24px;
+
+    color: black;
+}
+
+/* ARROW */
+
+.admin-arrow {
+    font-size: 14px;
+
+    color: black;
+
+    transition: 0.3s;
+}
+
+/* ROTATE */
+
+.rotate-admin-arrow {
+    transform: rotate(180deg);
+}
+
+/* ================= DROPDOWN ================= */
+
+.admin-dropdown-menu {
+    position: absolute;
+
+    top: 65px;
+    right: 0;
+
+    width: 290px;
+
+    background:
+        rgba(255, 255, 255, 0.96);
+
+    backdrop-filter: blur(12px);
+
+    border-radius: 20px;
+
+    padding: 14px;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.18);
+
+    z-index: 999;
+
+    display: none;
+
+    animation: dropdownAnimation 0.25s ease;
+}
+
+/* SHOW */
+
+.show-admin-dropdown {
+    display: block;
+}
+
+/* ================= TOP ================= */
+
+.admin-dropdown-top {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding-bottom: 14px;
+
+    margin-bottom: 10px;
+
+    border-bottom:
+        1px solid #ececec;
+}
+
+/* PROFILE */
+
+.admin-dropdown-profile {
+    width: 54px;
+    height: 54px;
+
+    border-radius: 50%;
+
+    background: #ececec;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ICON */
+
+.admin-dropdown-profile i {
+    font-size: 28px;
+
+    color: black;
+}
+
+/* TEXT */
+
+.admin-dropdown-top h4 {
+    margin: 0;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    color: black;
+}
+
+.admin-dropdown-top p {
+    margin: 0;
+
+    font-size: 14px;
+
+    color: #666;
+}
+
+/* ================= MENU LINK ================= */
+
+.admin-dropdown-menu a {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    text-decoration: none;
+
+    color: black;
+
+    padding: 13px 14px;
+
+    border-radius: 14px;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    transition: 0.3s;
+}
+
+/* HOVER */
+
+.admin-dropdown-menu a:hover {
+    background: #f3f3f3;
+}
+
+/* ICON */
+
+.admin-dropdown-menu a i {
+    font-size: 18px;
+}
+
+/* LOGOUT */
+
+.admin-logout-btn {
+    color: #ff3b3b !important;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes dropdownAnimation {
+
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:992px) {
+
+    .admin-navbar {
+        flex-direction: column;
+
+        gap: 18px;
+    }
+
+    .admin-nav-center {
+        gap: 18px;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
+}
+
+@media(max-width:576px) {
+
+    .admin-navbar {
+        padding: 18px 20px;
+    }
+
+    .admin-nav-center {
+        gap: 12px;
+    }
+
+    .admin-nav-center a {
+        font-size: 14px;
+
+        padding: 8px 12px;
+    }
+
+    .admin-nav-center a i {
+        font-size: 16px;
+    }
+
+    .admin-profile-circle {
+        width: 42px;
+        height: 42px;
+    }
+
+    .admin-profile-circle i {
+        font-size: 20px;
+    }
+
+    .admin-dropdown-menu {
+        width: 250px;
+    }
+}
