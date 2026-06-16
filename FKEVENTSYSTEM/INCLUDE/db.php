@@ -2359,110 +2359,72 @@ function profile($conn, $user_id)
 
     $stmt->close();
 
-    // COMMITTEE INFO
+// COMMITTEE INFO
     if (
         $profile
         &&
         $profile['role'] == 'committee'
     ) {
 
+        // FIXED: Changed 'cr.Role_name' to 'cr.position'
+        // FIXED: Changed 'clubcommittee' to 'clubcommitee'
+        // FIXED: Changed 'clubs' to 'club'
         $sql_committee = "
-
             SELECT
                 c.Club_name,
-                cr.Role_name
-
-            FROM clubcommittee cc
-
-            LEFT JOIN clubs c
+                cr.position AS Role_name 
+            FROM clubcommitee cc
+            LEFT JOIN club c
                 ON cc.Club_id = c.Club_id
-
             LEFT JOIN committee_roles cr
-                ON cc.Committee_role_id =
-                cr.Committee_role_id
-
+                ON cc.Committee_role_id = cr.Committee_role_id
             WHERE cc.User_id = ?
-
         ";
 
-        $stmt2 =
-            $conn->prepare($sql_committee);
+        $stmt2 = $conn->prepare($sql_committee);
 
         if ($stmt2) {
-
-            $stmt2->bind_param(
-                "i",
-                $user_id
-            );
-
+            $stmt2->bind_param("i", $user_id);
             $stmt2->execute();
-
-            $result2 =
-                $stmt2->get_result();
-
+            $result2 = $stmt2->get_result();
             $committee_info = [];
 
-            while (
-                $row =
-                $result2->fetch_assoc()
-            ) {
-
+            while ($row = $result2->fetch_assoc()) {
                 $committee_info[] = $row;
             }
 
-            $profile['committee_info']
-                = $committee_info;
-
+            $profile['committee_info'] = $committee_info;
             $stmt2->close();
         }
     }
 
     // CLUB MEMBERSHIP
+    // FIXED: Changed 'clubs' to 'club'
     $sql_member = "
-
         SELECT
             c.Club_name,
             cm.Joined_date,
             cm.status
-
         FROM clubmember cm
-
-        LEFT JOIN clubs c
+        LEFT JOIN club c
             ON cm.Club_id = c.Club_id
-
         WHERE cm.User_id = ?
         AND cm.status = 'active'
-
     ";
 
-    $stmt3 =
-        $conn->prepare($sql_member);
+    $stmt3 = $conn->prepare($sql_member);
 
     if ($stmt3) {
-
-        $stmt3->bind_param(
-            "i",
-            $user_id
-        );
-
+        $stmt3->bind_param("i", $user_id);
         $stmt3->execute();
-
-        $result3 =
-            $stmt3->get_result();
-
+        $result3 = $stmt3->get_result();
         $clubmember_info = [];
 
-        while (
-            $row =
-            $result3->fetch_assoc()
-        ) {
-
+        while ($row = $result3->fetch_assoc()) {
             $clubmember_info[] = $row;
         }
 
-        $profile['clubmember_info']
-            = $clubmember_info;
-
+        $profile['clubmember_info'] = $clubmember_info;
         $stmt3->close();
     }
 
@@ -2476,7 +2438,6 @@ function editProfile($conn, $user_id, $data, $file = null)
         ||
         !is_array($data)
     ) {
-
         return [
             'success' => false,
             'message' => 'Invalid parameters.'
