@@ -35,7 +35,7 @@ $reportsPageUrl = '../Module4/index.php';
     <!-- ================= LEFT ================= -->
     <div class="admin-nav-left">
 
-        <a href="admin.php">
+        <a href="/FKEVENTSYSTEM/Module1/admin.php">
 
             <i class="bi bi-code-slash"></i>
 
@@ -268,20 +268,15 @@ $reportsPageUrl = '../Module4/index.php';
                 </div>
 
                 <!-- PROFILE -->
-                <a href="../Module1/profile.php">
-
+                <a href="/FKEVENTSYSTEM/Module1/profile.php">
                     <i class="bi bi-person-circle"></i>
                     View Profile
-
                 </a>
 
-                <!-- LOGOUT -->
-                <a href="../Module1/login.php"
+                <a href="/FKEVENTSYSTEM/Module1/login.php"
                     class="admin-logout-btn">
-
                     <i class="bi bi-box-arrow-right"></i>
                     Sign Out
-
                 </a>
 
             </div>
