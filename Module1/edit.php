@@ -1,12 +1,22 @@
 <?php
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include '../INCLUDE/db.php';
 
-$data = edit($_GET['User_id'] ?? null);
+$id = (int)($_GET['id'] ?? 0);
+$event_id = (int)($_GET['event_id'] ?? 0);
 
-$user = $data['user'];
-$success = $data['success'];
-$error = $data['error'];
+$stmt = $conn->prepare("SELECT * FROM attendance WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+
+$result = $stmt->get_result();
+$attendance = $result->fetch_assoc();
+
+$stmt->close();
+
+$success = '';
+$error = '';
 
 ?>
 

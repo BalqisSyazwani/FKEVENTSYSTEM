@@ -1,80 +1,80 @@
 <?php
 
-require_once __DIR__ . '/../INCLUDE/db.php';
+include '../INCLUDE/db.php';
 
-date_default_timezone_set('Asia/Kuala_Lumpur');
+$id = (int)($_GET['id'] ?? 0);
+$event_id = (int)($_GET['event_id'] ?? 0);
 
-if (empty($_SESSION['user']['User_id']) || strtolower((string) ($_SESSION['user']['role'] ?? '')) !== 'committee') {
-    header('Location: ../login.php');
-    exit;
-}
-
-$id = (int) ($_GET['id'] ?? 0);
-$eventId = (int) ($_GET['event_id'] ?? 0);
-
-$stmt = $conn->prepare('SELECT * FROM attendance WHERE id = ? LIMIT 1');
-$stmt->bind_param('i', $id);
+$stmt = $conn->prepare("SELECT * FROM attendance WHERE id = ?");
+$stmt->bind_param("i", $id);
 $stmt->execute();
-$row = $stmt->get_result()->fetch_assoc();
+
+$result = $stmt->get_result();
+$attendance = $result->fetch_assoc();
+
 $stmt->close();
 
-if (!$row) {
-    header('Location: ' . ($eventId > 0 ? 'manage-event-attendance.php?event_id=' . $eventId : '../Module3/clubEvents.php'));
-    exit;
-}
-
+$success = '';
+$error = '';
 if (isset($_POST['update_attendance'])) {
 
     $student_name = $_POST['student_name'];
-
     $student_id = $_POST['student_id'];
-
     $club_name = $_POST['club_name'];
-
     $event_name = $_POST['event_name'];
-
     $attendance_date = $_POST['attendance_date'];
-
     $attendance_time = $_POST['attendance_time'];
-
     $attendance_status = $_POST['attendance_status'];
-
     $volunteer_status = $_POST['volunteer_status'];
 
-    $points = calculateAttendancePoints($attendance_status, $volunteer_status);
-
-    $updateStmt = $conn->prepare(
-        'UPDATE attendance SET
-         student_name = ?, student_id = ?, club_name = ?, event_name = ?,
-         attendance_date = ?, attendance_time = ?, attendance_status = ?,
-         volunteer_status = ?, points = ?
-         WHERE id = ?'
+    $points = calculateAttendancePoints(
+        $attendance_status,
+        $volunteer_status
     );
-    if ($updateStmt) {
-        $updateStmt->bind_param(
-            'ssssssssii',
-            $student_name,
-            $student_id,
-            $club_name,
-            $event_name,
-            $attendance_date,
-            $attendance_time,
-            $attendance_status,
-            $volunteer_status,
-            $points,
-            $id
+
+    $update = $conn->prepare("
+        UPDATE attendance
+        SET student_name=?,
+            student_id=?,
+            club_name=?,
+            event_name=?,
+            attendance_date=?,
+            attendance_time=?,
+            attendance_status=?,
+            volunteer_status=?,
+            points=?
+        WHERE id=?
+    ");
+
+    $update->bind_param(
+        "ssssssssii",
+        $student_name,
+        $student_id,
+        $club_name,
+        $event_name,
+        $attendance_date,
+        $attendance_time,
+        $attendance_status,
+        $volunteer_status,
+        $points,
+        $id
+    );
+
+    if ($update->execute()) {
+
+        header(
+            "Location: manage-event-attendance.php?event_id=$event_id&msg=Attendance+updated+successfully&msg_type=success"
         );
-        $updateStmt->execute();
-        $updateStmt->close();
+        exit();
+
+    } else {
+
+        $error = "Failed to update attendance.";
+
     }
 
-    $redirectEventId = $eventId > 0 ? $eventId : (int) ($_POST['event_id'] ?? 0);
-    header(
-        'Location: manage-event-attendance.php'
-            . ($redirectEventId > 0 ? '?event_id=' . $redirectEventId : '')
-    );
+    $update->close();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -83,306 +83,259 @@ if (isset($_POST['update_attendance'])) {
 <head>
 
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Edit Attendance</title>
 
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet"
-        href="style.css">
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Your Existing CSS -->
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/adminHeader.css">
+    <link rel="stylesheet" href="../CSS/addUser.css">
 
 </head>
 
 <body>
 
-    <div class="container">
+<div class="add-user-container">
 
-        <div class="navbar">
+    <!-- PAGE TITLE -->
+    <h1 class="add-user-title">
+        Edit Attendance
+    </h1>
 
-            <div class="logo">
-                <img src="logo.png" alt="Logo">
-            </div>
+    <p class="add-user-subtitle">
+        Update student attendance information.
+    </p>
 
-            <div class="nav-menu">
+    <!-- SUCCESS MESSAGE -->
+    <?php if (!empty($success)): ?>
 
-                <a href="index.php">
-                    Dashboard
-                </a>
-
-                <a href="manage-event-attendance.php"
-                    class="active">
-
-                    Attendance
-
-                </a>
-
-                <a href="participation-history.php">
-                    Participation History
-                </a>
-
-                <a href="top-student-ranking.php">
-                    Ranking
-                </a>
-
-                <a href="report-overview.php">
-                    Reports
-                </a>
-
-                <a href="participation-dashboard.php">
-                    Dashboard Analytics
-                </a>
-
-            </div>
-
+        <div class="alert alert-success mb-4">
+            <?= $success ?>
         </div>
 
-        <div class="content">
+    <?php endif; ?>
 
-            <h1>Edit Attendance</h1>
+    <!-- ERROR MESSAGE -->
+    <?php if (!empty($error)): ?>
 
-            <div class="form-container">
+        <div class="alert alert-danger mb-4">
+            <?= $error ?>
+        </div>
 
-                <form method="POST"
-                    class="modern-form">
+    <?php endif; ?>
 
-                    <div class="form-row">
+    <!-- FORM BOX -->
+    <div class="add-user-box">
 
-                        <div class="form-group">
+        <form method="POST">
 
-                            <label>Student Name</label>
+            <!-- Hidden ID -->
+            <input type="hidden"
+                name="id"
+                value="<?= $attendance['id'] ?>">
 
-                            <input type="text"
-                                name="student_name"
+            <div class="row">
 
-                                value="<?php
-                                        echo $row['student_name'];
-                                        ?>"
+                <!-- STUDENT NAME -->
+                <div class="col-lg-6 mb-4">
 
-                                required>
+                    <label class="form-label-custom">
+                        Student Name
+                    </label>
 
-                        </div>
+                    <input type="text"
+                        name="student_name"
+                        class="form-input-custom"
+                        value="<?= htmlspecialchars($attendance['student_name']) ?>"
+                        required>
 
-                        <div class="form-group">
+                </div>
 
-                            <label>Student ID</label>
+                <!-- STUDENT ID -->
+                <div class="col-lg-6 mb-4">
 
-                            <input type="text"
-                                name="student_id"
+                    <label class="form-label-custom">
+                        Student ID
+                    </label>
 
-                                value="<?php
-                                        echo $row['student_id'];
-                                        ?>"
+                    <input type="text"
+                        name="student_id"
+                        class="form-input-custom"
+                        value="<?= htmlspecialchars($attendance['student_id']) ?>"
+                        required>
 
-                                required>
+                </div>
 
-                        </div>
+                <!-- CLUB NAME -->
+                <div class="col-lg-6 mb-4">
 
-                    </div>
+                    <label class="form-label-custom">
+                        Club Name
+                    </label>
 
-                    <div class="form-row">
+                    <select name="club_name"
+                        class="form-input-custom">
 
-                        <div class="form-group">
+                        <option <?= ($attendance['club_name'] == 'Programming & Coding Club') ? 'selected' : '' ?>>
+                            Programming & Coding Club
+                        </option>
 
-                            <label>club Name</label>
+                        <option <?= ($attendance['club_name'] == 'Cyber Security Club') ? 'selected' : '' ?>>
+                            Cyber Security Club
+                        </option>
 
-                            <select name="club_name">
+                        <option <?= ($attendance['club_name'] == 'Data Science & AI Club') ? 'selected' : '' ?>>
+                            Data Science & AI Club
+                        </option>
 
-                                <option
-                                    <?php
-                                    if ($row['club_name'] == "Programming & Coding club")
-                                        echo "selected";
-                                    ?>>
+                        <option <?= ($attendance['club_name'] == 'Game Development Club') ? 'selected' : '' ?>>
+                            Game Development Club
+                        </option>
 
-                                    Programming & Coding club
+                        <option <?= ($attendance['club_name'] == 'Cloud Computing Club') ? 'selected' : '' ?>>
+                            Cloud Computing Club
+                        </option>
 
-                                </option>
+                    </select>
 
-                                <option
-                                    <?php
-                                    if ($row['club_name'] == "Cyber Security club")
-                                        echo "selected";
-                                    ?>>
+                </div>
 
-                                    Cyber Security club
+                <!-- EVENT NAME -->
+                <div class="col-lg-6 mb-4">
 
-                                </option>
+                    <label class="form-label-custom">
+                        Event Name
+                    </label>
 
-                                <option
-                                    <?php
-                                    if ($row['club_name'] == "Data Science & AI club")
-                                        echo "selected";
-                                    ?>>
+                    <input type="text"
+                        name="event_name"
+                        class="form-input-custom"
+                        value="<?= htmlspecialchars($attendance['event_name']) ?>"
+                        required>
 
-                                    Data Science & AI club
+                </div>
 
-                                </option>
+                <!-- ATTENDANCE DATE -->
+                <div class="col-lg-6 mb-4">
 
-                                <option
-                                    <?php
-                                    if ($row['club_name'] == "Game Development club")
-                                        echo "selected";
-                                    ?>>
+                    <label class="form-label-custom">
+                        Attendance Date
+                    </label>
 
-                                    Game Development club
+                    <input type="date"
+                        name="attendance_date"
+                        class="form-input-custom"
+                        value="<?= $attendance['attendance_date'] ?>"
+                        required>
 
-                                </option>
+                </div>
 
-                                <option
-                                    <?php
-                                    if ($row['club_name'] == "Cloud Computing club")
-                                        echo "selected";
-                                    ?>>
+                <!-- ATTENDANCE TIME -->
+                <div class="col-lg-6 mb-4">
 
-                                    Cloud Computing club
+                    <label class="form-label-custom">
+                        Attendance Time
+                    </label>
 
-                                </option>
+                    <input type="time"
+                        name="attendance_time"
+                        class="form-input-custom"
+                        value="<?= $attendance['attendance_time'] ?>"
+                        required>
 
-                            </select>
+                </div>
 
-                        </div>
+                <!-- ATTENDANCE STATUS -->
+                <div class="col-lg-6 mb-4">
 
-                        <div class="form-group">
+                    <label class="form-label-custom">
+                        Attendance Status
+                    </label>
 
-                            <label>Event Name</label>
+                    <select name="attendance_status"
+                        class="form-input-custom">
 
-                            <input type="text"
-                                name="event_name"
+                        <option value="Present"
+                            <?= ($attendance['attendance_status'] == 'Present') ? 'selected' : '' ?>>
+                            Present
+                        </option>
 
-                                value="<?php
-                                        echo $row['event_name'];
-                                        ?>"
+                        <option value="Late"
+                            <?= ($attendance['attendance_status'] == 'Late') ? 'selected' : '' ?>>
+                            Late
+                        </option>
 
-                                required>
+                        <option value="Absent"
+                            <?= ($attendance['attendance_status'] == 'Absent') ? 'selected' : '' ?>>
+                            Absent
+                        </option>
 
-                        </div>
+                    </select>
 
-                    </div>
+                </div>
 
-                    <div class="form-row">
+                <!-- VOLUNTEER -->
+                <div class="col-lg-6 mb-4">
 
-                        <div class="form-group">
+                    <label class="form-label-custom">
+                        Volunteer / Helper
+                    </label>
 
-                            <label>Attendance Date</label>
+                    <select name="volunteer_status"
+                        class="form-input-custom">
 
-                            <input type="date"
-                                name="attendance_date"
+                        <option value="Yes"
+                            <?= ($attendance['volunteer_status'] == 'Yes') ? 'selected' : '' ?>>
+                            Yes
+                        </option>
 
-                                value="<?php
-                                        echo $row['attendance_date'];
-                                        ?>"
+                        <option value="No"
+                            <?= ($attendance['volunteer_status'] == 'No') ? 'selected' : '' ?>>
+                            No
+                        </option>
 
-                                required>
+                    </select>
 
-                        </div>
-
-                        <div class="form-group">
-
-                            <label>Attendance Time</label>
-
-                            <input type="time"
-                                name="attendance_time"
-
-                                value="<?php
-                                        echo $row['attendance_time'];
-                                        ?>"
-
-                                required>
-
-                        </div>
-
-                    </div>
-
-                    <div class="form-row">
-
-                        <div class="form-group">
-
-                            <label>Attendance Status</label>
-
-                            <select name="attendance_status">
-
-                                <option
-                                    <?php
-                                    if ($row['attendance_status'] == "Present")
-                                        echo "selected";
-                                    ?>>
-
-                                    Present
-
-                                </option>
-
-                                <option
-                                    <?php
-                                    if ($row['attendance_status'] == "Late")
-                                        echo "selected";
-                                    ?>>
-
-                                    Late
-
-                                </option>
-
-                                <option
-                                    <?php
-                                    if ($row['attendance_status'] == "Absent")
-                                        echo "selected";
-                                    ?>>
-
-                                    Absent
-
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <label>Volunteer / Helper</label>
-
-                            <select name="volunteer_status">
-
-                                <option
-                                    <?php
-                                    if ($row['volunteer_status'] == "No")
-                                        echo "selected";
-                                    ?>>
-
-                                    No
-
-                                </option>
-
-                                <option
-                                    <?php
-                                    if ($row['volunteer_status'] == "Yes")
-                                        echo "selected";
-                                    ?>>
-
-                                    Yes
-
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                    <button type="submit"
-                        name="update_attendance"
-                        class="submit-btn">
-
-                        Update Attendance
-
-                    </button>
-
-                </form>
+                </div>
 
             </div>
 
-        </div>
+            <!-- BUTTONS -->
+            <div class="submit-flex">
+
+                <button type="submit"
+                    name="update_attendance"
+                    class="save-btn">
+
+                    <i class="bi bi-check-circle-fill"></i>
+                    Update Attendance
+
+                </button>
+
+                <a href="manage-event-attendance.php?event_id=<?= $_GET['event_id'] ?>"
+                    class="cancel-btn">
+
+                    <i class="bi bi-x-circle"></i>
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </form>
 
     </div>
 
-</body>
+</div>
 
+</body>
 </html>
