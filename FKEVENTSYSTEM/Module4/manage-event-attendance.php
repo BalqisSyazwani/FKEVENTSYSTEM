@@ -135,7 +135,7 @@ $navBase = '../';
                 class="save-btn text-decoration-none d-inline-flex align-items-center gap-2"
                 style="height: auto; padding: 10px 18px; font-size: 14px; background: #3f4654;">
                 <i class="bi bi-arrow-left"></i>
-                Back to clubs Events
+                Back to club Events
             </a>
         </div>
 
@@ -159,7 +159,7 @@ $navBase = '../';
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label-custom">clubs</label>
+                            <label class="form-label-custom">club</label>
                             <input type="text" class="form-input-custom" value="<?= htmlspecialchars($clubName) ?>" readonly>
                         </div>
                         <div class="col-md-6">

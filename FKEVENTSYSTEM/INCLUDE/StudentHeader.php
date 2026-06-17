@@ -23,8 +23,8 @@ if (!isset($navBase)) {
         <a href="<?= htmlspecialchars($navBase) ?>../Module2/viewClubListStudent.php"
             class="active-admin-nav">
 
-            <i class="bi bi-suit-clubs-fill"></i>
-            clubs List
+            <i class="bi bi-suit-club-fill"></i>
+            club List
 
         </a>
 

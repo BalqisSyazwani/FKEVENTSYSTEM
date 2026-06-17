@@ -39,7 +39,7 @@ $navBase = '../';
                 </a>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="../IMG/logo.png" alt="FK clubs Logo" class="dashboard-logo">
+                <img src="../IMG/logo.png" alt="FK club Logo" class="dashboard-logo">
             </div>
         </div>
     </div>

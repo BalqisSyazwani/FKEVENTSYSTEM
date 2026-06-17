@@ -121,7 +121,7 @@ if (
             </h1>
 
             <p>
-                Overview of users, clubs,
+                Overview of users, club,
                 events, and attendance records.
             </p>
 
@@ -314,29 +314,29 @@ if (
 
         </div>
 
-        <!-- ================= clubs ================= -->
-        <div class="analytics-section-title mt-5" id="clubs-activities">
+        <!-- ================= club ================= -->
+        <div class="analytics-section-title mt-5" id="club-activities">
 
             <span>
-                clubs Activities
+                club Activities
             </span>
 
         </div>
 
         <div class="analytics-wrapper">
 
-            <div class="chart-box clubs-stats-container mb-4">
+            <div class="chart-box club-stats-container mb-4">
                 <div class="chart-top mb-3">
                     <div>
-                        <h3>clubs Overview</h3>
-                        <p>Students, clubs status, and membership totals</p>
+                        <h3>club Overview</h3>
+                        <p>Students, club status, and membership totals</p>
                     </div>
                     <div class="chart-icon">
                         <i class="bi bi-grid-1x2-fill"></i>
                     </div>
                 </div>
 
-                <div class="row g-4 clubs-stats-row">
+                <div class="row g-4 club-stats-row">
                     <div class="col-lg-3 col-md-6">
                         <div class="stat-box stat-box-purple">
                             <div class="stat-box-top">
@@ -351,7 +351,7 @@ if (
                     <div class="col-lg-3 col-md-6">
                         <div class="stat-box stat-box-active">
                             <div class="stat-box-top">
-                                <p class="stat-box-label">Active clubs</p>
+                                <p class="stat-box-label">Active club</p>
                                 <div class="stat-box-icon">
                                     <i class="bi bi-check-circle-fill"></i>
                                 </div>
@@ -362,7 +362,7 @@ if (
                     <div class="col-lg-3 col-md-6">
                         <div class="stat-box stat-box-inactive">
                             <div class="stat-box-top">
-                                <p class="stat-box-label">Inactive clubs</p>
+                                <p class="stat-box-label">Inactive club</p>
                                 <div class="stat-box-icon">
                                     <i class="bi bi-x-circle-fill"></i>
                                 </div>
@@ -389,8 +389,8 @@ if (
                     <div class="chart-box">
                         <div class="chart-top">
                             <div>
-                                <h3>Student Distribution Across clubs</h3>
-                                <p>Number of students enrolled in each clubs</p>
+                                <h3>Student Distribution Across club</h3>
+                                <p>Number of students enrolled in each club</p>
                             </div>
                             <div class="chart-icon">
                                 <i class="bi bi-bar-chart-fill"></i>
@@ -501,7 +501,7 @@ if (
         new Chart(document.getElementById('clubStudentChart'), {
             type: 'bar',
             data: {
-                labels: clubDistLabels.length ? clubDistLabels : ['No clubs'],
+                labels: clubDistLabels.length ? clubDistLabels : ['No club'],
                 datasets: [{
                     label: 'Students',
                     data: clubDistCounts.length ? clubDistCounts : [0],

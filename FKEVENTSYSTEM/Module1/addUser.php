@@ -87,7 +87,7 @@ include '../INCLUDE/db.php';
                     $insert_message = "All fields are required.";
                 } else if ($role === 'committee' && empty($club_id)) {
                     $insert_success = false;
-                    $insert_message = "Please select a clubs for the committee member.";
+                    $insert_message = "Please select a club for the committee member.";
                 } else {
                     $insert_success = insertUser($student_id, $fullname, $ic_number, $phone, $email, $role, $club_id, $committee_role);
                     if ($insert_success === true) {
@@ -188,7 +188,7 @@ include '../INCLUDE/db.php';
                                 Student
                             </option>
                             <option value="committee" <?= (($_POST['role'] ?? "") == "committee") ? "selected" : "" ?>>
-                                clubs Committee Member
+                                club Committee Member
                             </option>
                         </select>
                     </div>
@@ -200,20 +200,20 @@ include '../INCLUDE/db.php';
 
                     <div class="row">
 
-                        <!-- clubs (committee position is assigned under clubs → Assign clubs Committee) -->
+                        <!-- club (committee position is assigned under club → Assign club Committee) -->
                         <div class="col-lg-12 mb-4">
                             <label class="form-label-custom">
-                                clubs Name
+                                club Name
                             </label>
                             <select class="form-input-custom"
                                 name="club_id">
                                 <option value="">
-                                    Select clubs
+                                    Select club
                                 </option>
                                 <?php
-                                $clubs = getClubs();
-                                if ($clubs && $clubs->num_rows > 0) {
-                                    while ($row = $clubs->fetch_assoc()) {
+                                $club = getClubs();
+                                if ($club && $club->num_rows > 0) {
+                                    while ($row = $club->fetch_assoc()) {
                                 ?>
                                         <option value="<?= htmlspecialchars($row['Club_id']); ?>" <?= (isset($_POST['club_id']) && $_POST['club_id'] == $row['Club_id']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($row['Club_name']); ?>

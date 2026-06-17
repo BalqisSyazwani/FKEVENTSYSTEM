@@ -256,7 +256,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                             } elseif ($user['role'] == 'student') {
                                                 echo 'Student';
                                             } elseif ($user['role'] == 'committee') {
-                                                echo 'clubs Committee Member';
+                                                echo 'club Committee Member';
                                             } else {
                                                 echo htmlspecialchars($user['role']);
                                             }
@@ -282,8 +282,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                         if ($stmt->fetch()) {
                                             $stmt->close();
 
-                                            // Query clubs name
-                                            $stmt2 = $conn->prepare("SELECT Club_name FROM clubs WHERE club_id = ?");
+                                            // Query club name
+                                            $stmt2 = $conn->prepare("SELECT Club_name FROM club WHERE club_id = ?");
                                             if ($stmt2) {
                                                 $stmt2->bind_param("i", $club_id);
                                                 $stmt2->execute();
@@ -318,7 +318,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                 ?>
                                 <div class="col-lg-6 mb-4">
                                     <label class="form-label-custom">
-                                        clubs Name
+                                        club Name
                                     </label>
                                     <input type="text"
                                         class="form-input-custom"
@@ -327,7 +327,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                 </div>
                                 <div class="col-lg-6 mb-4">
                                     <label class="form-label-custom">
-                                        Assigned Role in clubs
+                                        Assigned Role in club
                                     </label>
                                     <input type="text"
                                         class="form-input-custom"

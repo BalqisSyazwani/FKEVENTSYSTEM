@@ -65,12 +65,12 @@ while ($row = $monthlyTrend->fetch_assoc()) {
         <div class="row">
             <div class="col-md-6 mb-4">
                 <div class="chart-card">
-                    <h3>Event per clubs</h3><canvas id="clubChart"></canvas>
+                    <h3>Event per club</h3><canvas id="clubChart"></canvas>
                 </div>
             </div>
             <div class="col-md-6 mb-4">
                 <div class="chart-card">
-                    <h3>Participants per clubs</h3><canvas id="participantClubChart"></canvas>
+                    <h3>Participants per club</h3><canvas id="participantClubChart"></canvas>
                 </div>
             </div>
             <div class="col-md-6 mb-4">

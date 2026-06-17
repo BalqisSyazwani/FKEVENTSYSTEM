@@ -160,28 +160,28 @@ if (isset($_POST['submit_attendance'])) {
 
                         <div class="form-group">
 
-                            <label>clubs Name</label>
+                            <label>club Name</label>
 
                             <select name="club_name" required>
 
-                                <option value="Programming & Coding clubs">
-                                    Programming & Coding clubs
+                                <option value="Programming & Coding club">
+                                    Programming & Coding club
                                 </option>
 
-                                <option value="Cyber Security clubs">
-                                    Cyber Security clubs
+                                <option value="Cyber Security club">
+                                    Cyber Security club
                                 </option>
 
-                                <option value="Data Science & AI clubs">
-                                    Data Science & AI clubs
+                                <option value="Data Science & AI club">
+                                    Data Science & AI club
                                 </option>
 
-                                <option value="Game Development clubs">
-                                    Game Development clubs
+                                <option value="Game Development club">
+                                    Game Development club
                                 </option>
 
-                                <option value="Cloud Computing clubs">
-                                    Cloud Computing clubs
+                                <option value="Cloud Computing club">
+                                    Cloud Computing club
                                 </option>
 
                             </select>

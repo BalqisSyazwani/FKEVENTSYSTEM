@@ -29,7 +29,7 @@ while ($row = mysqli_fetch_assoc($chart_query)) {
     $data[] = $row['total'];
 }
 
-/* clubs PARTICIPATION CHART */
+/* club PARTICIPATION CHART */
 
 $club_chart_query = mysqli_query(
 
@@ -141,11 +141,11 @@ while ($row = mysqli_fetch_assoc($event_chart_query)) {
 
                 </div>
 
-                <!-- clubs CHART -->
+                <!-- club CHART -->
 
                 <div class="chart-box">
 
-                    <h2>clubs Participation</h2>
+                    <h2>club Participation</h2>
 
                     <canvas id="clubChart">
                     </canvas>
@@ -257,7 +257,7 @@ while ($row = mysqli_fetch_assoc($event_chart_query)) {
         });
     </script>
 
-    <!-- clubs CHART -->
+    <!-- club CHART -->
 
     <script>
         const clubctx =
@@ -279,7 +279,7 @@ while ($row = mysqli_fetch_assoc($event_chart_query)) {
 
                 datasets: [{
 
-                    label: 'clubs Participation',
+                    label: 'club Participation',
 
                     data:
 

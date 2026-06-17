@@ -314,7 +314,7 @@
 }
 
 #user-summary,
-#clubs-activities {
+#club-activities {
     scroll-margin-top: 100px;
 }
 
@@ -428,13 +428,13 @@ html {
     max-height: 320px !important;
 }
 
-/* ================= clubs STAT BOXES ================= */
+/* ================= club STAT BOXES ================= */
 
-.clubs-stats-container {
+.club-stats-container {
     margin-bottom: 0;
 }
 
-.clubs-stats-row {
+.club-stats-row {
     margin-bottom: 0;
 }
 

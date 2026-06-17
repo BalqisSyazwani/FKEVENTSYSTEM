@@ -64,8 +64,8 @@
             <i class="bi bi-info-circle-fill"></i>
 
             <p>
-                FK Student clubs & Event Management System<br>
-                helps manage clubs, users, activities,<br>
+                FK Student club & Event Management System<br>
+                helps manage club, users, activities,<br>
                 and university events efficiently.
             </p>
 

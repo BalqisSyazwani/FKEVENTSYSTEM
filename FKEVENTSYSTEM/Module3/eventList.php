@@ -144,7 +144,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                         <thead>
                             <tr>
                                 <th>Event name</th>
-                                <th>clubs</th>
+                                <th>club</th>
                                 <th>Date</th>
                                 <th>Venue</th>
                                 <th>Points</th>

@@ -47,7 +47,7 @@ if ($total_participation > 0) {
             $total_participation) * 100);
 }
 
-/* MOST ACTIVE clubs */
+/* MOST ACTIVE club */
 
 $club_query = mysqli_query(
 
@@ -66,7 +66,7 @@ LIMIT 1"
 
 );
 
-$clubs = mysqli_fetch_assoc($club_query);
+$club = mysqli_fetch_assoc($club_query);
 
 /* MOST ACTIVE STUDENT */
 
@@ -182,15 +182,15 @@ $top_student = mysqli_fetch_assoc($student_query);
 
                 <div class="card">
 
-                    <h3>Most Active clubs</h3>
+                    <h3>Most Active club</h3>
 
                     <p>
 
                         <?php
 
-                        if ($clubs) {
+                        if ($club) {
 
-                            echo $clubs['club_name'];
+                            echo $club['club_name'];
                         } else {
 
                             echo "-";

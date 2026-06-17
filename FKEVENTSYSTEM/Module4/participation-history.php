@@ -117,7 +117,7 @@ $result = mysqli_query($conn, $query);
                     <tr>
 
                         <th>Student ID</th>
-                        <th>clubs Name</th>
+                        <th>club Name</th>
                         <th>Event Name</th>
                         <th>Date</th>
                         <th>Status</th>

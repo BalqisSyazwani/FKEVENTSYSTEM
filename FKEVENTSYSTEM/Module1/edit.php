@@ -177,7 +177,7 @@ $error = $data['error'];
 
                                     <option value="committee"
                                         <?= ($user['role'] == 'committee') ? 'selected' : ''; ?>>
-                                        clubs Committee Member
+                                        club Committee Member
                                     </option>
 
                                 </select>

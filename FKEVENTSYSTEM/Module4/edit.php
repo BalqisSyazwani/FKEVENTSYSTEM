@@ -184,57 +184,57 @@ if (isset($_POST['update_attendance'])) {
 
                         <div class="form-group">
 
-                            <label>clubs Name</label>
+                            <label>club Name</label>
 
                             <select name="club_name">
 
                                 <option
                                     <?php
-                                    if ($row['club_name'] == "Programming & Coding clubs")
+                                    if ($row['club_name'] == "Programming & Coding club")
                                         echo "selected";
                                     ?>>
 
-                                    Programming & Coding clubs
+                                    Programming & Coding club
 
                                 </option>
 
                                 <option
                                     <?php
-                                    if ($row['club_name'] == "Cyber Security clubs")
+                                    if ($row['club_name'] == "Cyber Security club")
                                         echo "selected";
                                     ?>>
 
-                                    Cyber Security clubs
+                                    Cyber Security club
 
                                 </option>
 
                                 <option
                                     <?php
-                                    if ($row['club_name'] == "Data Science & AI clubs")
+                                    if ($row['club_name'] == "Data Science & AI club")
                                         echo "selected";
                                     ?>>
 
-                                    Data Science & AI clubs
+                                    Data Science & AI club
 
                                 </option>
 
                                 <option
                                     <?php
-                                    if ($row['club_name'] == "Game Development clubs")
+                                    if ($row['club_name'] == "Game Development club")
                                         echo "selected";
                                     ?>>
 
-                                    Game Development clubs
+                                    Game Development club
 
                                 </option>
 
                                 <option
                                     <?php
-                                    if ($row['club_name'] == "Cloud Computing clubs")
+                                    if ($row['club_name'] == "Cloud Computing club")
                                         echo "selected";
                                     ?>>
 
-                                    Cloud Computing clubs
+                                    Cloud Computing club
 
                                 </option>
 

@@ -61,7 +61,7 @@
     function getDisplayRole($role)
     {
         if ($role === 'admin') return 'Administrator';
-        else if ($role === 'committee') return 'clubs Committee Members';
+        else if ($role === 'committee') return 'club Committee Members';
         else if ($role === 'student') return 'Student';
         else return ucfirst($role);
     }

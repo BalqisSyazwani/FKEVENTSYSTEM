@@ -27,7 +27,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
         content="width=device-width, initial-scale=1.0">
 
     <title>
-        clubs Management
+        club Management
     </title>
 
     <!-- Bootstrap -->
@@ -60,11 +60,11 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
             <div>
 
                 <h1>
-                    clubs Management
+                    club Management
                 </h1>
 
                 <p>
-                    Manage all clubs information.
+                    Manage all club information.
                 </p>
 
             </div>
@@ -73,7 +73,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                 class="add-user-btn">
 
                 <i class="bi bi-plus-lg"></i>
-                Add clubs
+                Add club
 
             </a>
 
@@ -89,7 +89,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
         <div class="search-box">
 
             <h5>
-                Search clubs
+                Search club
             </h5>
 
             <form method="GET"
@@ -107,7 +107,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                         <option value="Club_name"
                             <?= (($_GET['search_filter'] ?? '') === 'Club_name') ? 'selected' : '' ?>>
 
-                            clubs name
+                            club name
 
                         </option>
 
@@ -150,7 +150,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                     <tr>
 
                         <th>
-                            clubs name
+                            club name
                         </th>
 
                         <th>
@@ -185,22 +185,22 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                     );
 
                     if (count($clubList) > 0):
-                        foreach ($clubList as $clubs):
+                        foreach ($clubList as $club):
                     ?>
                             <tr>
                                 <td>
-                                    <?= htmlspecialchars($clubs['Club_name']) ?>
+                                    <?= htmlspecialchars($club['Club_name']) ?>
                                 </td>
                                 <td class="text-wrap"
                                     style="max-width: 320px;">
-                                    <?= htmlspecialchars($clubs['Description'] !== '' ? $clubs['Description'] : '—') ?>
+                                    <?= htmlspecialchars($club['Description'] !== '' ? $club['Description'] : '—') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars(($clubs['Advisor_name'] ?? '') !== '' ? $clubs['Advisor_name'] : '—') ?>
+                                    <?= htmlspecialchars(($club['Advisor_name'] ?? '') !== '' ? $club['Advisor_name'] : '—') ?>
                                 </td>
                                 <td>
                                     <?php
-                                    $cap = $clubs['maxCapacity'] ?? null;
+                                    $cap = $club['maxCapacity'] ?? null;
                                     echo $cap !== null && $cap !== ''
                                         ? htmlspecialchars((string) $cap)
                                         : '—';
@@ -208,7 +208,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                                 </td>
                                 <td>
 
-                                    <?php if ((int) $clubs['Is_active'] === 1): ?>
+                                    <?php if ((int) $club['Is_active'] === 1): ?>
 
                                         <span class="status-active">
 
@@ -234,9 +234,9 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                                 <td>
                                     <div class="action-flex justify-content-center">
 
-                                        <a href="../Module2/editClub.php?Club_id=<?= (int) $clubs['Club_id']; ?>"
+                                        <a href="../Module2/editClub.php?Club_id=<?= (int) $club['Club_id']; ?>"
                                             class="edit-btn"
-                                            title="Edit clubs">
+                                            title="Edit club">
 
                                             <i class="bi bi-pencil-square"></i>
 
@@ -244,16 +244,16 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
 
                                         <form method="POST"
                                             class="d-inline"
-                                            onsubmit="return confirm('Delete this clubs? This cannot be undone.');">
+                                            onsubmit="return confirm('Delete this club? This cannot be undone.');">
                                             <input type="hidden"
                                                 name="delete_club"
                                                 value="1">
                                             <input type="hidden"
                                                 name="Club_id"
-                                                value="<?= (int) $clubs['Club_id'] ?>">
+                                                value="<?= (int) $club['Club_id'] ?>">
                                             <button type="submit"
                                                 class="delete-btn"
-                                                title="Delete clubs">
+                                                title="Delete club">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
@@ -268,7 +268,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                         <tr>
                             <td colspan="6"
                                 class="text-center">
-                                No clubs found.
+                                No club found.
                             </td>
                         </tr>
                     <?php endif; ?>

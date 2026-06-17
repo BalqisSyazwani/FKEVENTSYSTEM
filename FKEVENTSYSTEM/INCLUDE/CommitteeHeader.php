@@ -36,10 +36,10 @@ $profile = $user_id ? profile($conn, (int) $user_id) : null;
     <div class="admin-nav-center">
 
         <a href="<?= htmlspecialchars($navBase) ?>Module2/manageClubCommittee.php"
-            class="<?= $activeNav === 'clubs' ? 'active-admin-nav' : '' ?>">
+            class="<?= $activeNav === 'club' ? 'active-admin-nav' : '' ?>">
 
-            <i class="bi bi-suit-clubs-fill"></i>
-            clubs Management
+            <i class="bi bi-suit-club-fill"></i>
+            club Management
 
         </a>
 
@@ -47,7 +47,7 @@ $profile = $user_id ? profile($conn, (int) $user_id) : null;
             class="<?= $activeNav === 'events' ? 'active-admin-nav' : '' ?>">
 
             <i class="bi bi-ticket-perforated"></i>
-            clubs Events
+            club Events
         </a>
 
     </div>
@@ -104,7 +104,7 @@ $profile = $user_id ? profile($conn, (int) $user_id) : null;
 
                         </h4>
                         <p>
-                            clubs Committee Members
+                            club Committee Members
                         </p>
                     </div>
 

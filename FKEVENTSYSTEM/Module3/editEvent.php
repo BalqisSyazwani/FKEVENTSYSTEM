@@ -96,7 +96,7 @@ $statusOptions = ['Upcoming', 'Ongoing', 'Completed', 'Cancelled'];
             <div class="alert alert-success mb-4 text-center">
                 <?= htmlspecialchars($update_message) ?>
                 <br>
-                Redirecting to clubs events…
+                Redirecting to club events…
             </div>
         </div>
         <script>

@@ -31,7 +31,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
     ? $_GET['msg_type']
     : 'danger';
 
-$clubs = getClubDetailsForStudent($clubId, $userId);
+$club = getClubDetailsForStudent($clubId, $userId);
 $navBase = '../';
 ?>
 <!DOCTYPE html>
@@ -40,7 +40,7 @@ $navBase = '../';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>clubs Details</title>
+    <title>club Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../CSS/style.css">
@@ -55,17 +55,17 @@ $navBase = '../';
 
     <div class="add-user-container">
 
-        <h1 class="add-user-title">clubs Details</h1>
-        <p class="add-user-subtitle">View clubs information and join if slots are available.</p>
+        <h1 class="add-user-title">club Details</h1>
+        <p class="add-user-subtitle">View club information and join if slots are available.</p>
 
         <a href="viewClubListStudent.php" class="cancel-btn text-decoration-none d-inline-flex align-items-center gap-2 mb-4">
             <i class="bi bi-arrow-left"></i>
-            Back to clubs list
+            Back to club list
         </a>
 
-        <?php if (!$clubs): ?>
+        <?php if (!$club): ?>
             <div class="add-user-box">
-                <div class="alert alert-warning mb-0">clubs not found.</div>
+                <div class="alert alert-warning mb-0">club not found.</div>
             </div>
         <?php else: ?>
             <?php if ($join_success === false && $join_message !== ''): ?>
@@ -77,21 +77,21 @@ $navBase = '../';
             <?php endif; ?>
 
             <div class="add-user-box mb-4">
-                <h5 class="text-white mb-4">clubs information</h5>
+                <h5 class="text-white mb-4">club information</h5>
                 <div class="row">
                     <div class="col-lg-6 mb-4">
-                        <label class="form-label-custom">clubs name</label>
-                        <p class="text-white mb-0"><?= htmlspecialchars($clubs['Club_name']) ?></p>
+                        <label class="form-label-custom">club name</label>
+                        <p class="text-white mb-0"><?= htmlspecialchars($club['Club_name']) ?></p>
                     </div>
                     <div class="col-lg-6 mb-4">
                         <label class="form-label-custom">Advisor name</label>
                         <p class="text-white mb-0">
-                            <?= htmlspecialchars($clubs['Advisor_name'] !== '' ? $clubs['Advisor_name'] : '—') ?>
+                            <?= htmlspecialchars($club['Advisor_name'] !== '' ? $club['Advisor_name'] : '—') ?>
                         </p>
                     </div>
                     <div class="col-lg-6 mb-4">
-                        <label class="form-label-custom">clubs status</label>
-                        <?php $isActive = (int) $clubs['Is_active'] === 1; ?>
+                        <label class="form-label-custom">club status</label>
+                        <?php $isActive = (int) $club['Is_active'] === 1; ?>
                         <p class="mb-0">
                             <span class="status-badge <?= $isActive ? 'active-status' : 'inactive-status' ?>">
                                 <i class="bi bi-circle-fill"></i>
@@ -103,7 +103,7 @@ $navBase = '../';
                         <label class="form-label-custom">Available slots</label>
                         <p class="text-white mb-0">
                             <?php
-                            $cap = $clubs['maxCapacity'];
+                            $cap = $club['maxCapacity'];
                             echo $cap !== null ? htmlspecialchars((string) $cap) : '—';
                             ?>
                         </p>
@@ -111,13 +111,13 @@ $navBase = '../';
                     <div class="col-12 mb-0">
                         <label class="form-label-custom">Description</label>
                         <p class="text-white mb-0">
-                            <?= htmlspecialchars($clubs['Description'] !== '' ? $clubs['Description'] : '—') ?>
+                            <?= htmlspecialchars($club['Description'] !== '' ? $club['Description'] : '—') ?>
                         </p>
                     </div>
                 </div>
 
                 <div class="submit-flex submit-flex-center mt-4">
-                    <?php if ($clubs['is_member']): ?>
+                    <?php if ($club['is_member']): ?>
                         <span class="status-badge active-status">
                             <i class="bi bi-check-circle-fill"></i>
                             You are already a member
@@ -125,20 +125,20 @@ $navBase = '../';
                     <?php elseif (!$isActive): ?>
                         <span class="status-badge inactive-status">
                             <i class="bi bi-x-circle-fill"></i>
-                            clubs is inactive
+                            club is inactive
                         </span>
-                    <?php elseif ($clubs['maxCapacity'] === null || $clubs['maxCapacity'] <= 0): ?>
+                    <?php elseif ($club['maxCapacity'] === null || $club['maxCapacity'] <= 0): ?>
                         <span class="status-badge inactive-status">
                             <i class="bi bi-x-circle-fill"></i>
                             No slots available
                         </span>
                     <?php else: ?>
                         <form method="POST" action="" class="d-inline"
-                            onsubmit="return confirm('Join this clubs? One slot will be reserved for you.');">
-                            <input type="hidden" name="Club_id" value="<?= (int) $clubs['Club_id'] ?>">
+                            onsubmit="return confirm('Join this club? One slot will be reserved for you.');">
+                            <input type="hidden" name="Club_id" value="<?= (int) $club['Club_id'] ?>">
                             <button type="submit" name="join_club" class="save-btn">
                                 <i class="bi bi-person-plus-fill"></i>
-                                Join clubs
+                                Join club
                             </button>
                         </form>
                     <?php endif; ?>

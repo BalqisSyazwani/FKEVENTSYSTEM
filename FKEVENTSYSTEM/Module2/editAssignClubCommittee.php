@@ -59,7 +59,7 @@ $form = $assignment ?? [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit clubs Committee Assignment</title>
+    <title>Edit club Committee Assignment</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../CSS/style.css">
@@ -74,7 +74,7 @@ $form = $assignment ?? [
     <div class="add-user-container">
 
         <h1 class="add-user-title">Edit Committee Assignment</h1>
-        <p class="add-user-subtitle">Update clubs, member, role, or start date.</p>
+        <p class="add-user-subtitle">Update club, member, role, or start date.</p>
 
         <div class="add-user-box">
 
@@ -88,17 +88,17 @@ $form = $assignment ?? [
 
                     <div class="row">
                         <div class="col-lg-6 mb-4">
-                            <label class="form-label-custom">clubs name</label>
+                            <label class="form-label-custom">club name</label>
                             <select class="form-input-custom" name="club_id" required>
-                                <option value="">Select clubs</option>
+                                <option value="">Select club</option>
                                 <?php
-                                $clubs = getClubs();
-                                if ($clubs && $clubs->num_rows > 0):
-                                    while ($clubs = $clubs->fetch_assoc()):
+                                $club = getClubs();
+                                if ($club && $club->num_rows > 0):
+                                    while ($club = $club->fetch_assoc()):
                                 ?>
-                                        <option value="<?= (int) $clubs['Club_id'] ?>"
-                                            <?= ((string) ($form['Club_id'] ?? '') === (string) $clubs['Club_id']) ? 'selected' : '' ?>>
-                                            <?= htmlspecialchars($clubs['Club_name']) ?>
+                                        <option value="<?= (int) $club['Club_id'] ?>"
+                                            <?= ((string) ($form['Club_id'] ?? '') === (string) $club['Club_id']) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($club['Club_name']) ?>
                                         </option>
                                 <?php
                                     endwhile;
