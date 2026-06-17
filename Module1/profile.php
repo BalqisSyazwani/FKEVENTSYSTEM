@@ -124,10 +124,13 @@
                         <img src="<?= htmlspecialchars($photoPath) ?>" alt="Profile Photo" style="<?= $imgStyle ?>">
                     <?php
                     } else {
-                        // Use a default image for all users if no profile photo
+                        // Use a default icon if no profile photo
                     ?>
-                        <img src="assets/default-profile.png" alt="Default Profile Photo" style="<?= $imgStyle ?>">
+                        <div style="width:206px;height:250px;display:flex;align-items:center;justify-content:center;background:#f3f3f3;border-radius:50%;">
+                            <i class="bi bi-person-fill" style="font-size:206px;color:#bdbdbd;display:flex;align-items:center;justify-content:center;width:206px;height:250px;"></i>
+                        </div>
                     <?php
+
                     }
                     ?>
                 </div>

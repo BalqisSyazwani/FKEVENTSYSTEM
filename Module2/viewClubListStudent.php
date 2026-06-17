@@ -1,6 +1,13 @@
 <?php
+// 1. PHP MUST BE AT THE VERY TOP OF THE FILE
 require_once __DIR__ . '/../INCLUDE/db.php';
 
+// (Optional safeguard) If db.php doesn't start the session, you need to start it to access $_SESSION
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Now the header redirect will work properly
 if (empty($_SESSION['user']['User_id']) || ($_SESSION['user']['role'] ?? '') !== 'student') {
     header('Location: ../login.php');
     exit;
@@ -19,7 +26,7 @@ $navBase = '../';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>club List</title>
+    <title>Club List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../CSS/UserManagement.css">
@@ -32,11 +39,22 @@ $navBase = '../';
 
     <?php include __DIR__ . '/../INCLUDE/StudentHeader.php'; ?>
 
+    <div class="admin-nav-center">
+        <a href="<?= htmlspecialchars($navBase) ?>../Module2/viewClubListStudent.php" class="active-admin-nav">
+            <i class="bi bi-suit-club-fill"></i>
+            Club List
+        </a>
+        <a href="<?= htmlspecialchars($navBase) ?>../Module3/eventList.php">
+            <i class="bi bi-ticket-perforated"></i>
+            Events List
+        </a>
+    </div>
+
     <div class="user-container">
 
         <div class="top-flex">
             <div>
-                <h1>club List</h1>
+                <h1>Club List</h1>
                 <p>Browse club and view details to join.</p>
             </div>
         </div>
@@ -53,12 +71,10 @@ $navBase = '../';
                 <div class="search-flex">
                     <select class="search-select" name="search_filter">
                         <option value="">Select filter</option>
-                        <option value="Club_name"
-                            <?= (($_GET['search_filter'] ?? '') === 'Club_name') ? 'selected' : '' ?>>
-                            club name
+                        <option value="Club_name" <?= (($_GET['search_filter'] ?? '') === 'Club_name') ? 'selected' : '' ?>>
+                            Club name
                         </option>
-                        <option value="Advisor_name"
-                            <?= (($_GET['search_filter'] ?? '') === 'Advisor_name') ? 'selected' : '' ?>>
+                        <option value="Advisor_name" <?= (($_GET['search_filter'] ?? '') === 'Advisor_name') ? 'selected' : '' ?>>
                             Advisor name
                         </option>
                     </select>
@@ -79,7 +95,7 @@ $navBase = '../';
             <table class="table custom-table align-middle">
                 <thead>
                     <tr>
-                        <th>club name</th>
+                        <th>Club name</th>
                         <th>Description</th>
                         <th>Advisor name</th>
                         <th>Maximum capacity</th>
@@ -153,5 +169,4 @@ $navBase = '../';
     </div>
 
 </body>
-
 </html>
