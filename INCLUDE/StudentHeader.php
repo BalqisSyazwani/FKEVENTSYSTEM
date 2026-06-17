@@ -20,7 +20,7 @@ if (!isset($navBase)) {
     <!-- ================= CENTER ================= -->
     <div class="admin-nav-center">
 
-        <a href="<?= htmlspecialchars($navBase) ?>../Module2/viewClubListStudent.php"
+        <a href="../Module2/viewClubListStudent.php"
             class="active-admin-nav">
 
             <i class="bi bi-suit-club-fill"></i>
@@ -28,7 +28,7 @@ if (!isset($navBase)) {
 
         </a>
 
-        <a href="<?= htmlspecialchars($navBase) ?>../Module3/eventList.php">
+        <a href="../Module3/eventList.php">
 
             <i class="bi bi-ticket-perforated"></i>
             Events List

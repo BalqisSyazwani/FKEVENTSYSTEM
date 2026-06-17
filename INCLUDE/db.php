@@ -833,38 +833,42 @@ function updateClubDescriptionByCommittee(int $userId, int $clubId, string $desc
     }
 
     $assignedClub = getCommitteeClubForUser($userId);
-    if (!$assignedClub || (int) $assignedClub['Club_id'] !== $clubId) {
+
+    if (!$assignedClub || (int)$assignedClub['Club_id'] !== $clubId) {
         return ['success' => false, 'message' => 'You are not allowed to edit this club.'];
     }
 
     $description = trim($description);
-    $updatedAt = date('Y-m-d H:i:s');
 
     $stmt = $conn->prepare(
-        'UPDATE club SET Description = ?, Updated_at = ? WHERE Club_id = ?'
+        'UPDATE club SET Description = ? WHERE Club_id = ?'
     );
 
     if (!$stmt) {
-        $stmt = $conn->prepare('UPDATE club SET Description = ? WHERE Club_id = ?');
-        if (!$stmt) {
-            return ['success' => false, 'message' => 'Database error: ' . $conn->error];
-        }
-
-        $stmt->bind_param('si', $description, $clubId);
-    } else {
-        $stmt->bind_param('ssi', $description, $updatedAt, $clubId);
+        return [
+            'success' => false,
+            'message' => 'Database error: ' . $conn->error
+        ];
     }
+
+    $stmt->bind_param('si', $description, $clubId);
 
     if ($stmt->execute()) {
         $stmt->close();
 
-        return ['success' => true, 'message' => 'club description updated successfully.'];
+        return [
+            'success' => true,
+            'message' => 'Club description updated successfully.'
+        ];
     }
 
     $message = $stmt->error;
     $stmt->close();
 
-    return ['success' => false, 'message' => 'Could not update description: ' . $message];
+    return [
+        'success' => false,
+        'message' => 'Could not update description: ' . $message
+    ];
 }
 
 /**
@@ -1739,8 +1743,8 @@ function getUpcomingEvents()
          FROM event e
          INNER JOIN club c ON e.Club_id = c.Club_id
          WHERE e.Deleted_at IS NULL
-           AND LOWER(e.Event_Status) = 'upcoming'
-           AND e.Event_Date >= NOW()
+           AND e.Event_Status = 'Upcoming'
+
          ORDER BY e.Event_Date ASC"
     );
 }
@@ -2191,7 +2195,23 @@ function insertEventAttendanceRecord(
     );
     $ok = $stmt->execute();
     $stmt->close();
+if ($ok) {
 
+    $updateUser = $conn->prepare("
+        UPDATE user
+        SET points = points + ?
+        WHERE Student_id = ?
+    ");
+
+    $updateUser->bind_param(
+        "is",
+        $points,
+        $studentId
+    );
+
+    $updateUser->execute();
+    $updateUser->close();
+}
     return $ok;
 }
 

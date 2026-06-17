@@ -10,12 +10,16 @@ $userId = (int) $_SESSION['user']['User_id'];
 $club = getCommitteeClubForUser($userId);
 $eventList = [];
 
-if ($club) {
-    $eventsResult = getEventsByClub((int) $club['Club_id']);
-    if ($eventsResult) {
-        while ($row = $eventsResult->fetch_assoc()) {
-            $eventList[] = $row;
-        }
+$eventsResult = $conn->query("
+    SELECT *
+    FROM event
+    WHERE Deleted_at IS NULL
+    ORDER BY Event_Date DESC
+");
+
+if ($eventsResult) {
+    while ($row = $eventsResult->fetch_assoc()) {
+        $eventList[] = $row;
     }
 }
 
@@ -53,7 +57,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                 <h1 class="add-user-title mb-2">club Events</h1>
                 <p class="add-user-subtitle mb-0">
                     <?php if ($club): ?>
-                        Manage events for <?= htmlspecialchars($club['Club_name']) ?>
+                        Manage all events 
                     <?php else: ?>
                         You are not assigned to a club yet.
                     <?php endif; ?>
@@ -81,7 +85,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
             </div>
         <?php else: ?>
             <div class="table-box mt-4">
-                <h5 class="text-white mb-3">Your club events</h5>
+                <h5 class="text-white mb-3">All Events</h5>
                 <table class="table custom-table align-middle">
                     <thead>
                         <tr>
