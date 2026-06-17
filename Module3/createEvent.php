@@ -47,7 +47,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     }
 }
 
-$club = $role === 'admin' ? getAllClubs() : null;
+$clubsResult = $role === 'admin' ? getAllClubs() : null;
 
 $navBase = '../';
 $activeNav = 'events';
@@ -121,12 +121,12 @@ $useCommitteeHeader = $role === 'committee';
                             <input type="number" name="capacity" class="form-input-custom" min="1" required
                                 value="<?= htmlspecialchars($_POST['capacity'] ?? '') ?>">
                         </div>
-                        <?php if ($role === 'admin' && $club): ?>
+                        <?php if ($role === 'admin' && $clubsResult): ?>
                             <div class="col-lg-6 mb-4">
                                 <label class="form-label-custom">club</label>
                                 <select name="club_id" class="form-input-custom" required>
                                     <option value="">Select club</option>
-                                    <?php while ($c = $club->fetch_assoc()): ?>
+                                    <?php while ($c = $clubsResult->fetch_assoc()): ?>
                                         <option value="<?= (int) $c['club_id'] ?>"
                                             <?= ((string) ($_POST['club_id'] ?? '') === (string) $c['club_id']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($c['Club_name']) ?>
