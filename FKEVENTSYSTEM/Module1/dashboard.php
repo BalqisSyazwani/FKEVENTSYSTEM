@@ -314,73 +314,73 @@ if (
 
         </div>
 
-        <!-- ================= CLUB ================= -->
-        <div class="analytics-section-title mt-5" id="club-activities">
+        <!-- ================= clubs ================= -->
+        <div class="analytics-section-title mt-5" id="clubs-activities">
 
             <span>
-                Club Activities
+                clubs Activities
             </span>
 
         </div>
 
         <div class="analytics-wrapper">
 
-            <div class="chart-box club-stats-container mb-4">
+            <div class="chart-box clubs-stats-container mb-4">
                 <div class="chart-top mb-3">
                     <div>
-                        <h3>Club Overview</h3>
-                        <p>Students, club status, and membership totals</p>
+                        <h3>clubs Overview</h3>
+                        <p>Students, clubs status, and membership totals</p>
                     </div>
                     <div class="chart-icon">
                         <i class="bi bi-grid-1x2-fill"></i>
                     </div>
                 </div>
 
-                <div class="row g-4 club-stats-row">
+                <div class="row g-4 clubs-stats-row">
                     <div class="col-lg-3 col-md-6">
-                    <div class="stat-box stat-box-purple">
-                        <div class="stat-box-top">
-                            <p class="stat-box-label">Total Students</p>
-                            <div class="stat-box-icon">
-                                <i class="bi bi-mortarboard-fill"></i>
+                        <div class="stat-box stat-box-purple">
+                            <div class="stat-box-top">
+                                <p class="stat-box-label">Total Students</p>
+                                <div class="stat-box-icon">
+                                    <i class="bi bi-mortarboard-fill"></i>
+                                </div>
                             </div>
+                            <p class="stat-box-value"><?= (int) $clubStats['total_students'] ?></p>
                         </div>
-                        <p class="stat-box-value"><?= (int) $clubStats['total_students'] ?></p>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="stat-box stat-box-active">
-                        <div class="stat-box-top">
-                            <p class="stat-box-label">Active Clubs</p>
-                            <div class="stat-box-icon">
-                                <i class="bi bi-check-circle-fill"></i>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-box stat-box-active">
+                            <div class="stat-box-top">
+                                <p class="stat-box-label">Active clubs</p>
+                                <div class="stat-box-icon">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
                             </div>
+                            <p class="stat-box-value"><?= (int) $clubStats['active_clubs'] ?></p>
                         </div>
-                        <p class="stat-box-value"><?= (int) $clubStats['active_clubs'] ?></p>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="stat-box stat-box-inactive">
-                        <div class="stat-box-top">
-                            <p class="stat-box-label">Inactive Clubs</p>
-                            <div class="stat-box-icon">
-                                <i class="bi bi-x-circle-fill"></i>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-box stat-box-inactive">
+                            <div class="stat-box-top">
+                                <p class="stat-box-label">Inactive clubs</p>
+                                <div class="stat-box-icon">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </div>
                             </div>
+                            <p class="stat-box-value"><?= (int) $clubStats['inactive_clubs'] ?></p>
                         </div>
-                        <p class="stat-box-value"><?= (int) $clubStats['inactive_clubs'] ?></p>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="stat-box stat-box-blue">
-                        <div class="stat-box-top">
-                            <p class="stat-box-label">Total Members</p>
-                            <div class="stat-box-icon">
-                                <i class="bi bi-people-fill"></i>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-box stat-box-blue">
+                            <div class="stat-box-top">
+                                <p class="stat-box-label">Total Members</p>
+                                <div class="stat-box-icon">
+                                    <i class="bi bi-people-fill"></i>
+                                </div>
                             </div>
+                            <p class="stat-box-value"><?= (int) $clubStats['total_members'] ?></p>
                         </div>
-                        <p class="stat-box-value"><?= (int) $clubStats['total_members'] ?></p>
                     </div>
-                </div>
                 </div>
             </div>
 
@@ -389,8 +389,8 @@ if (
                     <div class="chart-box">
                         <div class="chart-top">
                             <div>
-                                <h3>Student Distribution Across Clubs</h3>
-                                <p>Number of students enrolled in each club</p>
+                                <h3>Student Distribution Across clubs</h3>
+                                <p>Number of students enrolled in each clubs</p>
                             </div>
                             <div class="chart-icon">
                                 <i class="bi bi-bar-chart-fill"></i>
@@ -515,12 +515,16 @@ if (
             options: {
                 responsive: true,
                 plugins: {
-                    legend: { display: false }
+                    legend: {
+                        display: false
+                    }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: { stepSize: 1 }
+                        ticks: {
+                            stepSize: 1
+                        }
                     },
                     x: {
                         ticks: {
@@ -539,7 +543,10 @@ if (
             }
             const target = document.querySelector(hash);
             if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
         })();
     </script>

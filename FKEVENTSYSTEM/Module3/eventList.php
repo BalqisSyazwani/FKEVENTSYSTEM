@@ -84,7 +84,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                             $full = ($current >= (int) $event['Student_Capacity']);
                             $registered = isRegistered($userId, (int) $event['Event_id']);
                             $waiting = isWaiting($userId, (int) $event['Event_id']);
-                            ?>
+                    ?>
                             <div class="col-md-4 mb-4">
                                 <div class="event-card">
                                     <h4><?= htmlspecialchars($event['Event_Name']) ?></h4>
@@ -124,7 +124,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                                     </div>
                                 </div>
                             </div>
-                            <?php
+                        <?php
                         endwhile;
                     else:
                         ?>
@@ -144,7 +144,7 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                         <thead>
                             <tr>
                                 <th>Event name</th>
-                                <th>Club</th>
+                                <th>clubs</th>
                                 <th>Date</th>
                                 <th>Venue</th>
                                 <th>Points</th>

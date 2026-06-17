@@ -42,11 +42,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
     <div class="login-container">
         <div class="login-card">
-            <img src="IMG/logo.png" alt="FK Club Logo" class="login-logo">
+            <img src="IMG/logo.png" alt="FK clubs Logo" class="login-logo">
 
-            <h1>FK Student Club & Event Management System</h1>
+            <h1>FK Student clubs & Event Management System</h1>
             <p>Sign in using your registered account.</p>
-        
+
             <?php if ($login_result === false): ?>
                 <div class="alert alert-danger mb-2"><?= htmlspecialchars($login_message) ?></div>
             <?php endif; ?>
@@ -74,7 +74,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                         Student
                     </option>
                     <option value="committee" <?= (($_POST['role'] ?? '') === 'committee') ? 'selected' : '' ?>>
-                        Club Committee Member
+                        clubs Committee Member
                     </option>
                 </select>
 

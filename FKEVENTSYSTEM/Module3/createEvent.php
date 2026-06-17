@@ -15,7 +15,7 @@ if (!in_array($role, ['committee', 'admin'], true)) {
     exit;
 }
 
-$club = $role === 'committee' ? getCommitteeClubForUser($userId) : null;
+$clubs = $role === 'committee' ? getCommitteeClubForUser($userId) : null;
 $error = '';
 $success = '';
 
@@ -27,7 +27,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $desc = trim($_POST['desc'] ?? '');
 
     if ($role === 'committee') {
-        $clubId = $club ? (int) $club['Club_id'] : 0;
+        $clubId = $clubs ? (int) $clubs['Club_id'] : 0;
     } else {
         $clubId = (int) ($_POST['club_id'] ?? 0);
     }
@@ -36,8 +36,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         $error = 'All fields are required and capacity must be greater than 0.';
     } elseif ($clubId <= 0) {
         $error = $role === 'committee'
-            ? 'You must be assigned to a club before creating events.'
-            : 'Please select a club.';
+            ? 'You must be assigned to a clubs before creating events.'
+            : 'Please select a clubs.';
     } else {
         if (createEvent($name, $desc, $date, $venue, $capacity, $clubId, $userId)) {
             header('Location: clubEvents.php?msg=' . urlencode('Event created successfully.') . '&msg_type=success');
@@ -77,12 +77,12 @@ $useCommitteeHeader = $role === 'committee';
     <div class="add-user-container">
         <h1 class="add-user-title">Create New Event</h1>
         <p class="add-user-subtitle">
-            <?php if ($role === 'committee' && $club): ?>
-                Add an event for <?= htmlspecialchars($club['Club_name']) ?>
+            <?php if ($role === 'committee' && $clubs): ?>
+                Add an event for <?= htmlspecialchars($clubs['Club_name']) ?>
             <?php elseif ($role === 'committee'): ?>
-                You need a club assignment to create events.
+                You need a clubs assignment to create events.
             <?php else: ?>
-                Add a new club event.
+                Add a new clubs event.
             <?php endif; ?>
         </p>
 
@@ -94,9 +94,9 @@ $useCommitteeHeader = $role === 'committee';
                 <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
             <?php endif; ?>
 
-            <?php if ($role === 'committee' && !$club): ?>
+            <?php if ($role === 'committee' && !$clubs): ?>
                 <div class="alert alert-warning mb-0">
-                    Please contact an administrator to be assigned to a club first.
+                    Please contact an administrator to be assigned to a clubs first.
                 </div>
             <?php else: ?>
                 <form method="POST" action="">
@@ -123,9 +123,9 @@ $useCommitteeHeader = $role === 'committee';
                         </div>
                         <?php if ($role === 'admin' && $clubs): ?>
                             <div class="col-lg-6 mb-4">
-                                <label class="form-label-custom">Club</label>
+                                <label class="form-label-custom">clubs</label>
                                 <select name="club_id" class="form-input-custom" required>
-                                    <option value="">Select club</option>
+                                    <option value="">Select clubs</option>
                                     <?php while ($c = $clubs->fetch_assoc()): ?>
                                         <option value="<?= (int) $c['club_id'] ?>"
                                             <?= ((string) ($_POST['club_id'] ?? '') === (string) $c['club_id']) ? 'selected' : '' ?>>

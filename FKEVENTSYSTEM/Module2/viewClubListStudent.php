@@ -19,7 +19,7 @@ $navBase = '../';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Club List</title>
+    <title>clubs List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../CSS/UserManagement.css">
@@ -36,7 +36,7 @@ $navBase = '../';
 
         <div class="top-flex">
             <div>
-                <h1>Club List</h1>
+                <h1>clubs List</h1>
                 <p>Browse clubs and view details to join.</p>
             </div>
         </div>
@@ -55,7 +55,7 @@ $navBase = '../';
                         <option value="">Select filter</option>
                         <option value="Club_name"
                             <?= (($_GET['search_filter'] ?? '') === 'Club_name') ? 'selected' : '' ?>>
-                            Club name
+                            clubs name
                         </option>
                         <option value="Advisor_name"
                             <?= (($_GET['search_filter'] ?? '') === 'Advisor_name') ? 'selected' : '' ?>>
@@ -79,7 +79,7 @@ $navBase = '../';
             <table class="table custom-table align-middle">
                 <thead>
                     <tr>
-                        <th>Club name</th>
+                        <th>clubs name</th>
                         <th>Description</th>
                         <th>Advisor name</th>
                         <th>Maximum capacity</th>
@@ -95,26 +95,26 @@ $navBase = '../';
                     );
 
                     if (count($clubList) > 0):
-                        foreach ($clubList as $club):
-                            ?>
+                        foreach ($clubList as $clubs):
+                    ?>
                             <tr>
-                                <td><?= htmlspecialchars($club['Club_name']) ?></td>
+                                <td><?= htmlspecialchars($clubs['Club_name']) ?></td>
                                 <td class="text-wrap" style="max-width: 320px;">
-                                    <?= htmlspecialchars($club['Description'] !== '' ? $club['Description'] : '—') ?>
+                                    <?= htmlspecialchars($clubs['Description'] !== '' ? $clubs['Description'] : '—') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars(($club['Advisor_name'] ?? '') !== '' ? $club['Advisor_name'] : '—') ?>
+                                    <?= htmlspecialchars(($clubs['Advisor_name'] ?? '') !== '' ? $clubs['Advisor_name'] : '—') ?>
                                 </td>
                                 <td>
                                     <?php
-                                    $cap = $club['maxCapacity'] ?? null;
+                                    $cap = $clubs['maxCapacity'] ?? null;
                                     echo $cap !== null && $cap !== ''
                                         ? htmlspecialchars((string) $cap)
                                         : '—';
                                     ?>
                                 </td>
                                 <td>
-                                    <?php if ((int) $club['Is_active'] === 1): ?>
+                                    <?php if ((int) $clubs['Is_active'] === 1): ?>
                                         <span class="status-active">
                                             <span class="status-dot active-dot"></span>
                                             Active
@@ -128,17 +128,17 @@ $navBase = '../';
                                 </td>
                                 <td>
                                     <div class="action-flex justify-content-center">
-                                        <a href="detailsClubListStudent.php?Club_id=<?= (int) $club['Club_id'] ?>"
+                                        <a href="detailsClubListStudent.php?Club_id=<?= (int) $clubs['Club_id'] ?>"
                                             class="save-btn text-decoration-none d-inline-flex align-items-center gap-2"
                                             style="height: auto; padding: 10px 18px; font-size: 14px;"
-                                            title="View club details">
+                                            title="View clubs details">
                                             <i class="bi bi-eye-fill"></i>
                                             View Details
                                         </a>
                                     </div>
                                 </td>
                             </tr>
-                            <?php
+                        <?php
                         endforeach;
                     else:
                         ?>

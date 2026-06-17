@@ -17,8 +17,8 @@ $flashType = 'success';
 if ($eventId <= 0 || !committeeCanManageEvent($userId, $eventId)) {
     header(
         'Location: ../Module3/clubEvents.php?msg='
-        . urlencode('Invalid event or you are not allowed to manage attendance for this event.')
-        . '&msg_type=danger'
+            . urlencode('Invalid event or you are not allowed to manage attendance for this event.')
+            . '&msg_type=danger'
     );
     exit;
 }
@@ -27,8 +27,8 @@ $eventContext = getEventWithClub($eventId);
 if (!$eventContext) {
     header(
         'Location: ../Module3/clubEvents.php?msg='
-        . urlencode('Event not found.')
-        . '&msg_type=danger'
+            . urlencode('Event not found.')
+            . '&msg_type=danger'
     );
     exit;
 }
@@ -76,10 +76,10 @@ if (isset($_POST['save_attendance'])) {
     ) {
         header(
             'Location: manage-event-attendance.php?event_id='
-            . $eventId
-            . '&msg='
-            . urlencode('Attendance saved successfully.')
-            . '&msg_type=success'
+                . $eventId
+                . '&msg='
+                . urlencode('Attendance saved successfully.')
+                . '&msg_type=success'
         );
         exit;
     } else {
@@ -135,7 +135,7 @@ $navBase = '../';
                 class="save-btn text-decoration-none d-inline-flex align-items-center gap-2"
                 style="height: auto; padding: 10px 18px; font-size: 14px; background: #3f4654;">
                 <i class="bi bi-arrow-left"></i>
-                Back to Club Events
+                Back to clubs Events
             </a>
         </div>
 
@@ -153,13 +153,13 @@ $navBase = '../';
                     No registered students for this event yet. Students must register before you can record attendance.
                 </div>
             <?php else: ?>
-               
+
                 <form method="POST" class="modern-form">
                     <input type="hidden" name="event_id" value="<?= $eventId ?>">
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label-custom">Club</label>
+                            <label class="form-label-custom">clubs</label>
                             <input type="text" class="form-input-custom" value="<?= htmlspecialchars($clubName) ?>" readonly>
                         </div>
                         <div class="col-md-6">
@@ -212,25 +212,25 @@ $navBase = '../';
                         </button>
                     </div>
 
-                     <div class="row g-3 mb-4">
-                    <div class="col-md-12">
-                        <button type="button" class="save-btn" onclick="toggleQRCode()">
-                            <i class="bi bi-qr-code"></i>
-                            Show QR Code
-                        </button>
-                    </div>
-                </div>
-
-                <div id="qrCodeDisplay" style="display:none;">
                     <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <div class="qr-code-display text-center" style="background: #2a2e39; padding: 20px; border-radius: 8px;">
-                                <img src="../Module4/qrcode.png" alt="Event QR Code" style="max-width: 100%; width: 200px; height: auto; border: 2px solid #3f4654;">
-                                <p class="text-white-50 mt-2 mb-0" style="font-size: 12px;">Scan this QR code to register</p>
+                        <div class="col-md-12">
+                            <button type="button" class="save-btn" onclick="toggleQRCode()">
+                                <i class="bi bi-qr-code"></i>
+                                Show QR Code
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="qrCodeDisplay" style="display:none;">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="qr-code-display text-center" style="background: #2a2e39; padding: 20px; border-radius: 8px;">
+                                    <img src="../Module4/qrcode.png" alt="Event QR Code" style="max-width: 100%; width: 200px; height: auto; border: 2px solid #3f4654;">
+                                    <p class="text-white-50 mt-2 mb-0" style="font-size: 12px;">Scan this QR code to register</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
                 </form>
             <?php endif; ?>

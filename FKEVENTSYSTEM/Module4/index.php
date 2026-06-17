@@ -5,48 +5,55 @@ include '../INCLUDE/db.php';
 date_default_timezone_set("Asia/Kuala_Lumpur");
 
 $total_students =
-mysqli_num_rows(
-mysqli_query($conn,
-"SELECT DISTINCT student_id FROM attendance")
-);
+    mysqli_num_rows(
+        mysqli_query(
+            $conn,
+            "SELECT DISTINCT student_id FROM attendance"
+        )
+    );
 
 $total_participation =
-mysqli_num_rows(
-mysqli_query($conn,
-"SELECT * FROM attendance")
-);
+    mysqli_num_rows(
+        mysqli_query(
+            $conn,
+            "SELECT * FROM attendance"
+        )
+    );
 
 $total_events =
-mysqli_num_rows(
-mysqli_query($conn,
-"SELECT DISTINCT event_name FROM attendance")
-);
+    mysqli_num_rows(
+        mysqli_query(
+            $conn,
+            "SELECT DISTINCT event_name FROM attendance"
+        )
+    );
 
 $present_query =
-mysqli_query($conn,
-"SELECT * FROM attendance
-WHERE attendance_status='Present'");
+    mysqli_query(
+        $conn,
+        "SELECT * FROM attendance
+WHERE attendance_status='Present'"
+    );
 
 $total_present =
-mysqli_num_rows($present_query);
+    mysqli_num_rows($present_query);
 
 $attendance_rate = 0;
 
-if($total_participation > 0){
+if ($total_participation > 0) {
 
     $attendance_rate =
-    round(($total_present /
-    $total_participation) * 100);
-
+        round(($total_present /
+            $total_participation) * 100);
 }
 
-/* MOST ACTIVE CLUB */
+/* MOST ACTIVE clubs */
 
 $club_query = mysqli_query(
 
-$conn,
+    $conn,
 
-"SELECT club_name,
+    "SELECT club_name,
 COUNT(*) AS total
 
 FROM attendance
@@ -59,15 +66,15 @@ LIMIT 1"
 
 );
 
-$club = mysqli_fetch_assoc($club_query);
+$clubs = mysqli_fetch_assoc($club_query);
 
 /* MOST ACTIVE STUDENT */
 
 $student_query = mysqli_query(
 
-$conn,
+    $conn,
 
-"SELECT student_name,
+    "SELECT student_name,
 SUM(points) AS total_points
 
 FROM attendance
@@ -89,166 +96,159 @@ $top_student = mysqli_fetch_assoc($student_query);
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard</title>
+    <title>Dashboard</title>
 
-<link rel="stylesheet"
-href="../CSS/module4-dashboard.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="../CSS/adminHeader.css">
+    <link rel="stylesheet"
+        href="../CSS/module4-dashboard.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../CSS/adminHeader.css">
 
 </head>
 
 <body>
 
-<?php include '../INCLUDE/AdminHeader.php'; ?>
+    <?php include '../INCLUDE/AdminHeader.php'; ?>
 
-<div class="container">
+    <div class="container">
 
-<!-- CONTENT -->
+        <!-- CONTENT -->
 
-<div class="content">
+        <div class="content">
 
-<!-- DASHBOARD CARDS -->
+            <!-- DASHBOARD CARDS -->
 
-<div class="card-container">
+            <div class="card-container">
 
-<div class="card">
+                <div class="card">
 
-<h3>Total Students</h3>
+                    <h3>Total Students</h3>
 
-<p>
+                    <p>
 
-<?php
-echo $total_students;
-?>
+                        <?php
+                        echo $total_students;
+                        ?>
 
-</p>
+                    </p>
 
-</div>
+                </div>
 
-<div class="card">
+                <div class="card">
 
-<h3>Total Participation</h3>
+                    <h3>Total Participation</h3>
 
-<p>
+                    <p>
 
-<?php
-echo $total_participation;
-?>
+                        <?php
+                        echo $total_participation;
+                        ?>
 
-</p>
+                    </p>
 
-</div>
+                </div>
 
-<div class="card">
+                <div class="card">
 
-<h3>Total Events</h3>
+                    <h3>Total Events</h3>
 
-<p>
+                    <p>
 
-<?php
-echo $total_events;
-?>
+                        <?php
+                        echo $total_events;
+                        ?>
 
-</p>
+                    </p>
 
-</div>
+                </div>
 
-<div class="card">
+                <div class="card">
 
-<h3>Attendance Rate</h3>
+                    <h3>Attendance Rate</h3>
 
-<p>
+                    <p>
 
-<?php
-echo $attendance_rate;
-?>%
+                        <?php
+                        echo $attendance_rate;
+                        ?>%
 
-</p>
+                    </p>
 
-</div>
+                </div>
 
-<div class="card">
+                <div class="card">
 
-<h3>Most Active Club</h3>
+                    <h3>Most Active clubs</h3>
 
-<p>
+                    <p>
 
-<?php
+                        <?php
 
-if($club){
+                        if ($clubs) {
 
-    echo $club['club_name'];
+                            echo $clubs['club_name'];
+                        } else {
 
-}
+                            echo "-";
+                        }
 
-else{
+                        ?>
 
-    echo "-";
+                    </p>
 
-}
+                </div>
 
-?>
+                <div class="card">
 
-</p>
+                    <h3>Most Active Student</h3>
 
-</div>
+                    <p>
 
-<div class="card">
+                        <?php
 
-<h3>Most Active Student</h3>
+                        if ($top_student) {
 
-<p>
+                            echo $top_student['student_name'];
+                        } else {
 
-<?php
+                            echo "-";
+                        }
 
-if($top_student){
+                        ?>
 
-    echo $top_student['student_name'];
+                    </p>
 
-}
+                </div>
 
-else{
+            </div>
 
-    echo "-";
+        </div>
 
-}
+    </div>
 
-?>
+    <script>
+        function toggleReportsNavDropdown(event) {
+            if (event) {
+                event.stopPropagation();
+            }
 
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-    function toggleReportsNavDropdown(event) {
-        if (event) {
-            event.stopPropagation();
+            document
+                .getElementById("reportsNavDropdown")
+                .classList.toggle("is-open");
         }
 
-        document
-            .getElementById("reportsNavDropdown")
-            .classList.toggle("is-open");
-    }
-
-    window.addEventListener("click", function(e) {
-        let reportsDropdown = document.getElementById("reportsNavDropdown");
-        if (reportsDropdown && !reportsDropdown.contains(e.target)) {
-            reportsDropdown.classList.remove("is-open");
-        }
-    });
-</script>
+        window.addEventListener("click", function(e) {
+            let reportsDropdown = document.getElementById("reportsNavDropdown");
+            if (reportsDropdown && !reportsDropdown.contains(e.target)) {
+                reportsDropdown.classList.remove("is-open");
+            }
+        });
+    </script>
 
 </body>
+
 </html>

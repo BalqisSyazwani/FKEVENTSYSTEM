@@ -256,7 +256,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                             } elseif ($user['role'] == 'student') {
                                                 echo 'Student';
                                             } elseif ($user['role'] == 'committee') {
-                                                echo 'Club Committee Member';
+                                                echo 'clubs Committee Member';
                                             } else {
                                                 echo htmlspecialchars($user['role']);
                                             }
@@ -274,7 +274,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
                                 if (isset($user['User_id'])) {
                                     // Query clubcommittee
-                                    $stmt = $conn->prepare("SELECT club_id, Committee_role_id FROM clubcommitee WHERE User_id = ?");
+                                    $stmt = $conn->prepare("SELECT club_id, Committee_role_id FROM clubcommittee WHERE User_id = ?");
                                     if ($stmt) {
                                         $stmt->bind_param("i", $user['User_id']);
                                         $stmt->execute();
@@ -282,8 +282,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                         if ($stmt->fetch()) {
                                             $stmt->close();
 
-                                            // Query club name
-                                            $stmt2 = $conn->prepare("SELECT Club_name FROM club WHERE club_id = ?");
+                                            // Query clubs name
+                                            $stmt2 = $conn->prepare("SELECT Club_name FROM clubs WHERE club_id = ?");
                                             if ($stmt2) {
                                                 $stmt2->bind_param("i", $club_id);
                                                 $stmt2->execute();
@@ -318,7 +318,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                 ?>
                                 <div class="col-lg-6 mb-4">
                                     <label class="form-label-custom">
-                                        Club Name
+                                        clubs Name
                                     </label>
                                     <input type="text"
                                         class="form-input-custom"
@@ -327,7 +327,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                 </div>
                                 <div class="col-lg-6 mb-4">
                                     <label class="form-label-custom">
-                                        Assigned Role in Club
+                                        Assigned Role in clubs
                                     </label>
                                     <input type="text"
                                         class="form-input-custom"

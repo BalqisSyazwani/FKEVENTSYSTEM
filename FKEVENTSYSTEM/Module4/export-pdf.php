@@ -98,7 +98,7 @@ $header = sprintf(
     "%-20s %-12s %-15s %-18s %-10s %-8s %-10s %-10s %-6s",
     'Student Name',
     'Student ID',
-    'Club Name',
+    'clubs Name',
     'Event Name',
     'Date',
     'Time',

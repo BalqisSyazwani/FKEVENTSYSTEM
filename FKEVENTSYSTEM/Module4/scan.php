@@ -6,7 +6,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 
 $event_id = isset($_GET['event_id']) ? (int)$_GET['event_id'] : 0;
 
-if(isset($_POST['submit_attendance'])){
+if (isset($_POST['submit_attendance'])) {
 
     $event_id = (int)$_POST['event_id'];
 
@@ -30,7 +30,7 @@ if(isset($_POST['submit_attendance'])){
 
     $stmt = $conn->prepare($checkSql);
 
-    if($stmt){
+    if ($stmt) {
 
         $stmt->bind_param(
             "is",
@@ -42,7 +42,7 @@ if(isset($_POST['submit_attendance'])){
 
         $result = $stmt->get_result();
 
-        if($result->num_rows > 0){
+        if ($result->num_rows > 0) {
 
             echo "
             <script>
@@ -69,7 +69,7 @@ if(isset($_POST['submit_attendance'])){
         $volunteer_status
     );
 
-    if($success){
+    if ($success) {
 
         echo "
         <script>
@@ -79,9 +79,7 @@ if(isset($_POST['submit_attendance'])){
         ";
 
         exit();
-    }
-
-    else{
+    } else {
 
         echo "
         <script>
@@ -106,164 +104,165 @@ if(isset($_POST['submit_attendance'])){
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<div class="content">
+        <div class="content">
 
-<h1>QR Attendance Form</h1>
+            <h1>QR Attendance Form</h1>
 
-<?php if($event_id > 0){ ?>
+            <?php if ($event_id > 0) { ?>
 
-<p>
-    Event ID:
-    <strong><?php echo $event_id; ?></strong>
-</p>
+                <p>
+                    Event ID:
+                    <strong><?php echo $event_id; ?></strong>
+                </p>
 
-<?php } ?>
+            <?php } ?>
 
-<div class="form-container">
+            <div class="form-container">
 
-<form method="POST" class="modern-form">
+                <form method="POST" class="modern-form">
 
-<input
-    type="hidden"
-    name="event_id"
-    value="<?php echo $event_id; ?>">
+                    <input
+                        type="hidden"
+                        name="event_id"
+                        value="<?php echo $event_id; ?>">
 
-<div class="form-row">
+                    <div class="form-row">
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Student Name</label>
+                            <label>Student Name</label>
 
-<input
-    type="text"
-    name="student_name"
-    placeholder="Enter Student Name"
-    required>
+                            <input
+                                type="text"
+                                name="student_name"
+                                placeholder="Enter Student Name"
+                                required>
 
-</div>
+                        </div>
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Student ID</label>
+                            <label>Student ID</label>
 
-<input
-    type="text"
-    name="student_id"
-    placeholder="Enter Student ID"
-    required>
+                            <input
+                                type="text"
+                                name="student_id"
+                                placeholder="Enter Student ID"
+                                required>
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<div class="form-row">
+                    <div class="form-row">
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Club Name</label>
+                            <label>clubs Name</label>
 
-<select name="club_name" required>
+                            <select name="club_name" required>
 
-<option value="Programming & Coding Club">
-    Programming & Coding Club
-</option>
+                                <option value="Programming & Coding clubs">
+                                    Programming & Coding clubs
+                                </option>
 
-<option value="Cyber Security Club">
-    Cyber Security Club
-</option>
+                                <option value="Cyber Security clubs">
+                                    Cyber Security clubs
+                                </option>
 
-<option value="Data Science & AI Club">
-    Data Science & AI Club
-</option>
+                                <option value="Data Science & AI clubs">
+                                    Data Science & AI clubs
+                                </option>
 
-<option value="Game Development Club">
-    Game Development Club
-</option>
+                                <option value="Game Development clubs">
+                                    Game Development clubs
+                                </option>
 
-<option value="Cloud Computing Club">
-    Cloud Computing Club
-</option>
+                                <option value="Cloud Computing clubs">
+                                    Cloud Computing clubs
+                                </option>
 
-</select>
+                            </select>
 
-</div>
+                        </div>
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Event Name</label>
+                            <label>Event Name</label>
 
-<input
-    type="text"
-    name="event_name"
-    placeholder="Enter Event Name"
-    required>
+                            <input
+                                type="text"
+                                name="event_name"
+                                placeholder="Enter Event Name"
+                                required>
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<div class="form-row">
+                    <div class="form-row">
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Attendance Status</label>
+                            <label>Attendance Status</label>
 
-<select name="attendance_status">
+                            <select name="attendance_status">
 
-<option value="Present">
-    Present
-</option>
+                                <option value="Present">
+                                    Present
+                                </option>
 
-<option value="Late">
-    Late
-</option>
+                                <option value="Late">
+                                    Late
+                                </option>
 
-<option value="Absent">
-    Absent
-</option>
+                                <option value="Absent">
+                                    Absent
+                                </option>
 
-</select>
+                            </select>
 
-</div>
+                        </div>
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Volunteer / Helper</label>
+                            <label>Volunteer / Helper</label>
 
-<select name="volunteer_status">
+                            <select name="volunteer_status">
 
-<option value="No">
-    No
-</option>
+                                <option value="No">
+                                    No
+                                </option>
 
-<option value="Yes">
-    Yes
-</option>
+                                <option value="Yes">
+                                    Yes
+                                </option>
 
-</select>
+                            </select>
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<button
-    type="submit"
-    name="submit_attendance"
-    class="submit-btn">
+                    <button
+                        type="submit"
+                        name="submit_attendance"
+                        class="submit-btn">
 
-    Submit Attendance
+                        Submit Attendance
 
-</button>
+                    </button>
 
-</form>
+                </form>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
 </body>
+
 </html>

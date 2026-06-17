@@ -4,18 +4,18 @@
 require_once '../INCLUDE/db.php';
 
 $clubId = (int) ($_GET['Club_id'] ?? $_POST['Club_id'] ?? 0);
-$club = getClubById($clubId);
+$clubs = getClubById($clubId);
 
 $update_success = null;
 $update_message = '';
 $redirect = false;
 
-if (!$club) {
+if (!$clubs) {
     $update_success = false;
-    $update_message = 'Club not found.';
+    $update_message = 'clubs not found.';
 }
 
-if ($club && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['update_club'])) {
+if ($clubs && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['update_club'])) {
     $clubName = trim($_POST['club_name'] ?? '');
     $description = trim($_POST['description'] ?? '');
     $advisorName = trim($_POST['advisor_name'] ?? '');
@@ -29,7 +29,7 @@ if ($club && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['upda
     if ($update_success) {
         $redirect = true;
     } else {
-        $club = [
+        $clubs = [
             'Club_id' => $clubId,
             'club_name' => $clubName,
             'description' => $description,
@@ -40,7 +40,7 @@ if ($club && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['upda
     }
 }
 
-$form = $club ?? [
+$form = $clubs ?? [
     'Club_id' => $clubId,
     'club_name' => '',
     'description' => '',
@@ -60,7 +60,7 @@ $form = $club ?? [
         content="width=device-width, initial-scale=1.0">
 
     <title>
-        Edit Club
+        Edit clubs
     </title>
 
     <!-- Bootstrap -->
@@ -91,7 +91,7 @@ $form = $club ?? [
             <div class="alert alert-success mb-4 text-center">
                 <?= htmlspecialchars($update_message) ?>
                 <br>
-                Redirecting to club management…
+                Redirecting to clubs management…
             </div>
         </div>
         <script>
@@ -107,11 +107,11 @@ $form = $club ?? [
         <div class="add-user-container">
 
             <h1 class="add-user-title">
-                Edit Club
+                Edit clubs
             </h1>
 
             <p class="add-user-subtitle">
-                Update club information, advisor, capacity, and status.
+                Update clubs information, advisor, capacity, and status.
             </p>
 
             <div class="add-user-box">
@@ -120,7 +120,7 @@ $form = $club ?? [
                     <div class="alert alert-danger"><?= htmlspecialchars($update_message) ?></div>
                 <?php endif; ?>
 
-                <?php if ($club): ?>
+                <?php if ($clubs): ?>
 
                     <form method="POST"
                         action="">
@@ -133,12 +133,12 @@ $form = $club ?? [
 
                             <div class="col-lg-6 mb-4">
                                 <label class="form-label-custom">
-                                    Club name
+                                    clubs name
                                 </label>
                                 <input type="text"
                                     name="club_name"
                                     class="form-input-custom"
-                                    placeholder="Enter club name"
+                                    placeholder="Enter clubs name"
                                     value="<?= htmlspecialchars($form['club_name']) ?>"
                                     required>
                             </div>
@@ -162,7 +162,7 @@ $form = $club ?? [
                                 <textarea name="description"
                                     class="form-input-custom"
                                     rows="4"
-                                    placeholder="Enter club description"><?= htmlspecialchars($form['description']) ?></textarea>
+                                    placeholder="Enter clubs description"><?= htmlspecialchars($form['description']) ?></textarea>
                             </div>
 
                             <div class="col-lg-6 mb-4">
@@ -180,7 +180,7 @@ $form = $club ?? [
 
                             <div class="col-lg-6 mb-4">
                                 <label class="form-label-custom">
-                                    Club status
+                                    clubs status
                                 </label>
                                 <select class="form-input-custom"
                                     name="club_status"
@@ -203,7 +203,7 @@ $form = $club ?? [
                                 name="update_club"
                                 class="save-btn">
                                 <i class="bi bi-pencil-square"></i>
-                                Update Club
+                                Update clubs
                             </button>
                             <a href="../Module2/clubManagement.php"
                                 class="cancel-btn text-decoration-none text-center">

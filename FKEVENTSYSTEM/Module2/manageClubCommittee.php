@@ -19,11 +19,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['update_club_d
     $update_message = $result['message'];
 }
 
-$club = getCommitteeClubForUser($userId);
-$clubMembers = $club ? getClubMembersByClubId((int) $club['Club_id']) : [];
+$clubs = getCommitteeClubForUser($userId);
+$clubMembers = $clubs ? getClubMembersByClubId((int) $clubs['Club_id']) : [];
 
 $navBase = '../';
-$activeNav = 'club';
+$activeNav = 'clubs';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@ $activeNav = 'club';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Club Management</title>
+    <title>clubs Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../CSS/style.css">
@@ -46,13 +46,13 @@ $activeNav = 'club';
 
     <div class="add-user-container">
 
-        <h1 class="add-user-title">Club Management</h1>
-        <p class="add-user-subtitle">View your club details and members.</p>
+        <h1 class="add-user-title">clubs Management</h1>
+        <p class="add-user-subtitle">View your clubs details and members.</p>
 
-        <?php if (!$club): ?>
+        <?php if (!$clubs): ?>
             <div class="add-user-box">
                 <div class="alert alert-warning mb-0">
-                    You are not assigned to a club yet. Please contact an administrator.
+                    You are not assigned to a clubs yet. Please contact an administrator.
                 </div>
             </div>
         <?php else: ?>
@@ -63,25 +63,25 @@ $activeNav = 'club';
             <?php endif; ?>
 
             <form method="POST" action="" class="add-user-box mb-4" id="clubInfoForm">
-                <input type="hidden" name="club_id" value="<?= (int) $club['Club_id'] ?>">
+                <input type="hidden" name="club_id" value="<?= (int) $clubs['Club_id'] ?>">
 
-                <h5 class="text-white mb-4">Club information</h5>
+                <h5 class="text-white mb-4">clubs information</h5>
                 <div class="row">
                     <div class="col-lg-6 mb-4">
-                        <label class="form-label-custom">Club name</label>
-                        <p class="text-white mb-0"><?= htmlspecialchars($club['Club_name']) ?></p>
+                        <label class="form-label-custom">clubs name</label>
+                        <p class="text-white mb-0"><?= htmlspecialchars($clubs['Club_name']) ?></p>
                     </div>
                     <div class="col-lg-6 mb-4">
                         <label class="form-label-custom">Advisor name</label>
                         <p class="text-white mb-0">
-                            <?= htmlspecialchars($club['Advisor_name'] !== '' ? $club['Advisor_name'] : '—') ?>
+                            <?= htmlspecialchars($clubs['Advisor_name'] !== '' ? $clubs['Advisor_name'] : '—') ?>
                         </p>
                     </div>
                     <div class="col-lg-6 mb-4">
-                        <label class="form-label-custom">Club status</label>
+                        <label class="form-label-custom">clubs status</label>
                         <?php
-                        $isActive = strcasecmp(trim($club['club_status']), 'inactive') !== 0
-                            && $club['club_status'] !== '0';
+                        $isActive = strcasecmp(trim($clubs['club_status']), 'inactive') !== 0
+                            && $clubs['club_status'] !== '0';
                         ?>
                         <p class="mb-0">
                             <span class="status-badge <?= $isActive ? 'active-status' : 'inactive-status' ?>">
@@ -93,7 +93,7 @@ $activeNav = 'club';
                     <div class="col-lg-6 mb-4">
                         <label class="form-label-custom">Your committee role</label>
                         <p class="text-white mb-0">
-                            <?= htmlspecialchars($club['Role_name'] !== '' ? $club['Role_name'] : '—') ?>
+                            <?= htmlspecialchars($clubs['Role_name'] !== '' ? $clubs['Role_name'] : '—') ?>
                         </p>
                     </div>
                     <div class="col-12 mb-0">
@@ -103,7 +103,7 @@ $activeNav = 'club';
                             name="description"
                             class="form-input-custom"
                             rows="4"
-                            placeholder="Enter club description"><?= htmlspecialchars($club['Description']) ?></textarea>
+                            placeholder="Enter clubs description"><?= htmlspecialchars($clubs['Description']) ?></textarea>
                     </div>
                 </div>
 
@@ -120,7 +120,7 @@ $activeNav = 'club';
             </form>
 
             <div class="table-box">
-                <h5 class="text-white mb-3">Club members</h5>
+                <h5 class="text-white mb-3">clubs members</h5>
                 <table class="table custom-table align-middle">
                     <thead>
                         <tr>
@@ -166,7 +166,7 @@ $activeNav = 'club';
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="7" class="text-center">No members found for this club.</td>
+                                <td colspan="7" class="text-center">No members found for this clubs.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

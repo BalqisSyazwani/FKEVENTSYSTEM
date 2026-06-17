@@ -68,10 +68,10 @@ $reportsPageUrl = '../Module4/index.php';
 
                 </a>
 
-                <a href="<?= htmlspecialchars($dashboardPageUrl) ?>#club-activities">
+                <a href="<?= htmlspecialchars($dashboardPageUrl) ?>#clubs-activities">
 
-                    <i class="bi bi-suit-club-fill"></i>
-                    Clubs
+                    <i class="bi bi-suit-clubs-fill"></i>
+                    clubs
 
                 </a>
 
@@ -86,7 +86,7 @@ $reportsPageUrl = '../Module4/index.php';
                     class="<?= $currentAdminPage === 'participation-dashboard.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-bar-chart-line"></i>
-                  Analytics
+                    Analytics
 
                 </a>
 
@@ -107,8 +107,8 @@ $reportsPageUrl = '../Module4/index.php';
             <span class="admin-nav-dropdown-toggle"
                 onclick="toggleClubNavDropdown(event)">
 
-                <i class="bi bi-suit-club-fill"></i>
-                Club
+                <i class="bi bi-suit-clubs-fill"></i>
+                clubs
                 <i class="bi bi-chevron-down admin-nav-chevron"
                     id="clubNavChevron"></i>
 
@@ -120,7 +120,7 @@ $reportsPageUrl = '../Module4/index.php';
                     class="<?= $currentAdminPage === 'clubManagement.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-list-ul"></i>
-                    Club Management
+                    clubs Management
 
                 </a>
 
@@ -128,7 +128,7 @@ $reportsPageUrl = '../Module4/index.php';
                     class="<?= $currentAdminPage === 'assignClubCommittee.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-person-badge"></i>
-                    Assign Club Committee
+                    Assign clubs Committee
 
                 </a>
 

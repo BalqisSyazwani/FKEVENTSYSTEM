@@ -89,7 +89,7 @@ include 'INCLUDE/db.php';
                     $insert_message = "All fields are required.";
                 } else if ($role === 'committee' && (empty($club_id) || empty($committee_role))) {
                     $insert_success = false;
-                    $insert_message = "Please select both Club and Assigned Role for committee member.";
+                    $insert_message = "Please select both clubs and Assigned Role for committee member.";
                 } else {
                     $insert_success = insertUser($student_id, $fullname, $ic_number, $phone, $email, $role, $club_id, $committee_role);
                     if ($insert_success === true) {
@@ -190,7 +190,7 @@ include 'INCLUDE/db.php';
                                 Student
                             </option>
                             <option value="committee" <?= (($_POST['role'] ?? "") == "committee") ? "selected" : "" ?>>
-                                Club Committee Member
+                                clubs Committee Member
                             </option>
                         </select>
                     </div>
@@ -202,15 +202,15 @@ include 'INCLUDE/db.php';
 
                     <div class="row">
 
-                        <!-- CLUB -->
+                        <!-- clubs -->
                         <div class="col-lg-6 mb-4">
                             <label class="form-label-custom">
-                                Club Name
+                                clubs Name
                             </label>
                             <select class="form-input-custom"
                                 name="club_id">
                                 <option value="">
-                                    Select Club
+                                    Select clubs
                                 </option>
                                 <?php
                                 $clubs = getClubs();

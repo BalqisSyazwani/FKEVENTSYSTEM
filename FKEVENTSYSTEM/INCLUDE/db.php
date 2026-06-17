@@ -65,11 +65,11 @@ function insertUser(
 
         $user_id = $conn->insert_id;
 
-        // ================= INSERT COMMITTEE AND CLUB MEMBER =================
+        // ================= INSERT COMMITTEE AND clubs MEMBER =================
         if (strtolower($role) === "committee" && !empty($club_id) && !empty($committee_role_id)) {
-            // Insert into clubcommitee table
+            // Insert into clubcommittee table
             $stmt_committee = $conn->prepare(
-                "INSERT INTO clubcommitee
+                "INSERT INTO clubcommittee
                 (
                     User_id,
                     Club_id,
@@ -148,14 +148,14 @@ function getClubs()
 {
     global $conn;
 
-    $sql = "SELECT * FROM club";
+    $sql = "SELECT * FROM clubs";
     $result = $conn->query($sql);
 
     return $result;
 }
 
 /**
- * Add a new club.
+ * Add a new clubs.
  *
  * @return array{success:bool,message:string}
  */
@@ -186,7 +186,7 @@ function insertClub(
     $maxCapacity = (int) trim((string) $maxCapacity);
 
     if ($clubName === '') {
-        return ['success' => false, 'message' => 'Club name is required.'];
+        return ['success' => false, 'message' => 'clubs name is required.'];
     }
 
     if ($advisorName === '') {
@@ -200,7 +200,7 @@ function insertClub(
     $createdAt = date('Y-m-d H:i:s');
 
     $stmt = $conn->prepare(
-        'INSERT INTO club (Club_name, Description, advisorName, clubStatus, maxCapacity, Created_at)
+        'INSERT INTO clubs (Club_name, Description, advisorName, clubStatus, maxCapacity, Created_at)
          VALUES (?, ?, ?, ?, ?, ?)'
     );
 
@@ -213,17 +213,17 @@ function insertClub(
     if ($stmt->execute()) {
         $stmt->close();
 
-        return ['success' => true, 'message' => 'Club added successfully.'];
+        return ['success' => true, 'message' => 'clubs added successfully.'];
     }
 
     $message = $stmt->error;
     $stmt->close();
 
-    return ['success' => false, 'message' => 'Could not add club: ' . $message];
+    return ['success' => false, 'message' => 'Could not add clubs: ' . $message];
 }
 
 /**
- * Load one club for the edit form.
+ * Load one clubs for the edit form.
  *
  * @return array<string, mixed>|null
  */
@@ -235,7 +235,7 @@ function getClubById(int $clubId): ?array
         return null;
     }
 
-    $stmt = $conn->prepare('SELECT * FROM club WHERE Club_id = ? LIMIT 1');
+    $stmt = $conn->prepare('SELECT * FROM clubs WHERE Club_id = ? LIMIT 1');
     if (!$stmt) {
         return null;
     }
@@ -268,7 +268,7 @@ function getClubById(int $clubId): ?array
 }
 
 /**
- * Update an existing club.
+ * Update an existing clubs.
  *
  * @return array{success:bool,message:string}
  */
@@ -283,7 +283,7 @@ function updateClub(
     global $conn;
 
     if ($clubId <= 0) {
-        return ['success' => false, 'message' => 'Invalid club ID.'];
+        return ['success' => false, 'message' => 'Invalid clubs ID.'];
     }
 
     $clubName = trim($clubName);
@@ -293,7 +293,7 @@ function updateClub(
     $maxCapacity = (int) trim((string) $maxCapacity);
 
     if ($clubName === '') {
-        return ['success' => false, 'message' => 'Club name is required.'];
+        return ['success' => false, 'message' => 'clubs name is required.'];
     }
 
     if ($advisorName === '') {
@@ -307,13 +307,13 @@ function updateClub(
     $updatedAt = date('Y-m-d H:i:s');
 
     $stmt = $conn->prepare(
-        'UPDATE club SET Club_name = ?, Description = ?, advisorName = ?, clubStatus = ?, maxCapacity = ?, Updated_at = ?
+        'UPDATE clubs SET Club_name = ?, Description = ?, advisorName = ?, clubStatus = ?, maxCapacity = ?, Updated_at = ?
          WHERE Club_id = ?'
     );
 
     if (!$stmt) {
         $stmt = $conn->prepare(
-            'UPDATE club SET Club_name = ?, Description = ?, advisorName = ?, clubStatus = ?, maxCapacity = ?
+            'UPDATE clubs SET Club_name = ?, Description = ?, advisorName = ?, clubStatus = ?, maxCapacity = ?
              WHERE Club_id = ?'
         );
 
@@ -329,17 +329,17 @@ function updateClub(
     if ($stmt->execute() && $stmt->affected_rows >= 0) {
         $stmt->close();
 
-        return ['success' => true, 'message' => 'Club updated successfully.'];
+        return ['success' => true, 'message' => 'clubs updated successfully.'];
     }
 
     $message = $stmt->error;
     $stmt->close();
 
-    return ['success' => false, 'message' => 'Could not update club: ' . $message];
+    return ['success' => false, 'message' => 'Could not update clubs: ' . $message];
 }
 
 /**
- * Advisor text stored on the club row (if any).
+ * Advisor text stored on the clubs row (if any).
  */
 function clubAdvisorTextFromRow(array $row): string
 {
@@ -404,8 +404,8 @@ function clubAdvisorUserIdFromRow(array $row): ?int
 }
 
 /**
- * Clubs for admin club management list, with optional filters (substring match).
- * Supports common column variants on `club` plus optional advisor FK to `user`.
+ * clubs for admin clubs management list, with optional filters (substring match).
+ * Supports common column variants on `clubs` plus optional advisor FK to `user`.
  *
  * @return list<array{Club_id:int,Club_name:string,Description:string,Advisor_name:string,Is_active:int}>
  */
@@ -413,7 +413,7 @@ function getClubsForManagement(?string $searchFilter = null, ?string $searchKeyw
 {
     global $conn;
 
-    $result = $conn->query('SELECT * FROM club ORDER BY Club_name ASC');
+    $result = $conn->query('SELECT * FROM clubs ORDER BY Club_name ASC');
     if ($result === false) {
         return [];
     }
@@ -507,7 +507,7 @@ function getClubsForManagement(?string $searchFilter = null, ?string $searchKeyw
 }
 
 /**
- * Delete a user and related club rows.
+ * Delete a user and related clubs rows.
  *
  * @return array{success:bool,message:string}
  */
@@ -523,7 +523,7 @@ function deleteUser(int $userId): array
 
     try {
         $related = [
-            ['clubcommitee', 'User_id'],
+            ['clubcommittee', 'User_id'],
             ['clubmember', 'User_id'],
         ];
 
@@ -568,7 +568,7 @@ function deleteUser(int $userId): array
 }
 
 /**
- * Delete a club and related membership rows.
+ * Delete a clubs and related membership rows.
  *
  * @return array{success:bool,message:string}
  */
@@ -577,14 +577,14 @@ function deleteClub(int $clubId): array
     global $conn;
 
     if ($clubId <= 0) {
-        return ['success' => false, 'message' => 'Invalid club ID.'];
+        return ['success' => false, 'message' => 'Invalid clubs ID.'];
     }
 
     $conn->begin_transaction();
 
     try {
         $related = [
-            ['clubcommitee', 'Club_id'],
+            ['clubcommittee', 'Club_id'],
             ['clubmember', 'Club_id'],
         ];
 
@@ -602,25 +602,25 @@ function deleteClub(int $clubId): array
             $stmt->close();
         }
 
-        $stmt = $conn->prepare('DELETE FROM club WHERE Club_id = ?');
+        $stmt = $conn->prepare('DELETE FROM clubs WHERE Club_id = ?');
         if (!$stmt) {
-            throw new Exception('Prepare failed (club): ' . $conn->error);
+            throw new Exception('Prepare failed (clubs): ' . $conn->error);
         }
 
         $stmt->bind_param('i', $clubId);
         if (!$stmt->execute()) {
-            throw new Exception('Delete failed (club): ' . $stmt->error);
+            throw new Exception('Delete failed (clubs): ' . $stmt->error);
         }
 
         if ($stmt->affected_rows < 1) {
             $stmt->close();
-            throw new Exception('Club not found.');
+            throw new Exception('clubs not found.');
         }
 
         $stmt->close();
         $conn->commit();
 
-        return ['success' => true, 'message' => 'Club deleted successfully.'];
+        return ['success' => true, 'message' => 'clubs deleted successfully.'];
     } catch (Exception $e) {
         $conn->rollback();
 
@@ -639,7 +639,7 @@ function getAssignedRoles()
 }
 
 /**
- * Committee members available for club assignment.
+ * Committee members available for clubs assignment.
  */
 function getCommitteeUsers()
 {
@@ -654,7 +654,7 @@ function getCommitteeUsers()
 }
 
 /**
- * Assign an existing committee user to a club.
+ * Assign an existing committee user to a clubs.
  *
  * @return array{success:bool,message:string}
  */
@@ -663,7 +663,7 @@ function assignClubCommittee(int $userId, int $clubId, int $committeeRoleId, str
     global $conn;
 
     if ($userId <= 0 || $clubId <= 0 || $committeeRoleId <= 0) {
-        return ['success' => false, 'message' => 'Please select committee member, club, and role.'];
+        return ['success' => false, 'message' => 'Please select committee member, clubs, and role.'];
     }
 
     $startDate = trim($startDate);
@@ -689,7 +689,7 @@ function assignClubCommittee(int $userId, int $clubId, int $committeeRoleId, str
     }
 
     $stmt = $conn->prepare(
-        'SELECT 1 FROM clubcommitee WHERE User_id = ? AND Club_id = ? LIMIT 1'
+        'SELECT 1 FROM clubcommittee WHERE User_id = ? AND Club_id = ? LIMIT 1'
     );
     if (!$stmt) {
         return ['success' => false, 'message' => 'Database error: ' . $conn->error];
@@ -702,14 +702,14 @@ function assignClubCommittee(int $userId, int $clubId, int $committeeRoleId, str
     $stmt->close();
 
     if ($alreadyAssigned) {
-        return ['success' => false, 'message' => 'This member is already assigned to the selected club.'];
+        return ['success' => false, 'message' => 'This member is already assigned to the selected clubs.'];
     }
 
     $conn->begin_transaction();
 
     try {
         $stmt = $conn->prepare(
-            'INSERT INTO clubcommitee (User_id, Club_id, Committee_role_id, Assigned_date) VALUES (?, ?, ?, ?)'
+            'INSERT INTO clubcommittee (User_id, Club_id, Committee_role_id, Assigned_date) VALUES (?, ?, ?, ?)'
         );
         if (!$stmt) {
             throw new Exception('Prepare failed (committee): ' . $conn->error);
@@ -753,7 +753,7 @@ function assignClubCommittee(int $userId, int $clubId, int $committeeRoleId, str
 
         $conn->commit();
 
-        return ['success' => true, 'message' => 'Club committee assigned successfully.'];
+        return ['success' => true, 'message' => 'clubs committee assigned successfully.'];
     } catch (Exception $e) {
         $conn->rollback();
 
@@ -762,7 +762,7 @@ function assignClubCommittee(int $userId, int $clubId, int $committeeRoleId, str
 }
 
 /**
- * Club details for a logged-in committee user (from their assignment).
+ * clubs details for a logged-in committee user (from their assignment).
  *
  * @return array<string,mixed>|null
  */
@@ -775,9 +775,9 @@ function getCommitteeClubForUser(int $userId): ?array
     }
 
     $stmt = $conn->prepare(
-        'SELECT c.*, cc.Assigned_date, cr.position AS Role_name
-         FROM clubcommitee cc
-         INNER JOIN club c ON cc.Club_id = c.Club_id
+        'SELECT c.*, cc.Assigned_date, cr.Role_name
+         FROM clubcommittee cc
+         INNER JOIN clubs c ON cc.Club_id = c.Club_id
          LEFT JOIN commiteerole cr ON cc.Committee_role_id = cr.Committee_role_id
          WHERE cc.User_id = ?
          ORDER BY cc.Assigned_date DESC
@@ -820,7 +820,7 @@ function getCommitteeClubForUser(int $userId): ?array
 }
 
 /**
- * Update club description for a committee user assigned to that club.
+ * Update clubs description for a committee user assigned to that clubs.
  *
  * @return array{success:bool,message:string}
  */
@@ -829,23 +829,23 @@ function updateClubDescriptionByCommittee(int $userId, int $clubId, string $desc
     global $conn;
 
     if ($userId <= 0 || $clubId <= 0) {
-        return ['success' => false, 'message' => 'Invalid club or user.'];
+        return ['success' => false, 'message' => 'Invalid clubs or user.'];
     }
 
     $assignedClub = getCommitteeClubForUser($userId);
     if (!$assignedClub || (int) $assignedClub['Club_id'] !== $clubId) {
-        return ['success' => false, 'message' => 'You are not allowed to edit this club.'];
+        return ['success' => false, 'message' => 'You are not allowed to edit this clubs.'];
     }
 
     $description = trim($description);
     $updatedAt = date('Y-m-d H:i:s');
 
     $stmt = $conn->prepare(
-        'UPDATE club SET Description = ?, Updated_at = ? WHERE Club_id = ?'
+        'UPDATE clubs SET Description = ?, Updated_at = ? WHERE Club_id = ?'
     );
 
     if (!$stmt) {
-        $stmt = $conn->prepare('UPDATE club SET Description = ? WHERE Club_id = ?');
+        $stmt = $conn->prepare('UPDATE clubs SET Description = ? WHERE Club_id = ?');
         if (!$stmt) {
             return ['success' => false, 'message' => 'Database error: ' . $conn->error];
         }
@@ -858,7 +858,7 @@ function updateClubDescriptionByCommittee(int $userId, int $clubId, string $desc
     if ($stmt->execute()) {
         $stmt->close();
 
-        return ['success' => true, 'message' => 'Club description updated successfully.'];
+        return ['success' => true, 'message' => 'clubs description updated successfully.'];
     }
 
     $message = $stmt->error;
@@ -868,7 +868,7 @@ function updateClubDescriptionByCommittee(int $userId, int $clubId, string $desc
 }
 
 /**
- * Whether a user is already a member of a club.
+ * Whether a user is already a member of a clubs.
  */
 function isUserClubMember(int $userId, int $clubId): bool
 {
@@ -895,7 +895,7 @@ function isUserClubMember(int $userId, int $clubId): bool
 }
 
 /**
- * Club details for the student details page.
+ * clubs details for the student details page.
  *
  * @return array<string,mixed>|null
  */
@@ -907,7 +907,7 @@ function getClubDetailsForStudent(int $clubId, int $userId = 0): ?array
         return null;
     }
 
-    $stmt = $conn->prepare('SELECT * FROM club WHERE Club_id = ? LIMIT 1');
+    $stmt = $conn->prepare('SELECT * FROM clubs WHERE Club_id = ? LIMIT 1');
     if (!$stmt) {
         return null;
     }
@@ -945,7 +945,7 @@ function getClubDetailsForStudent(int $clubId, int $userId = 0): ?array
 }
 
 /**
- * Student joins a club; remaining capacity on the club row is reduced by 1.
+ * Student joins a clubs; remaining capacity on the clubs row is reduced by 1.
  *
  * @return array{success:bool,message:string}
  */
@@ -974,22 +974,22 @@ function joinClubAsStudent(int $userId, int $clubId): array
         return ['success' => false, 'message' => 'Only students can join clubs.'];
     }
 
-    $club = getClubDetailsForStudent($clubId, $userId);
-    if (!$club) {
-        return ['success' => false, 'message' => 'Club not found.'];
+    $clubs = getClubDetailsForStudent($clubId, $userId);
+    if (!$clubs) {
+        return ['success' => false, 'message' => 'clubs not found.'];
     }
 
-    if ((int) $club['Is_active'] !== 1) {
-        return ['success' => false, 'message' => 'This club is not accepting members.'];
+    if ((int) $clubs['Is_active'] !== 1) {
+        return ['success' => false, 'message' => 'This clubs is not accepting members.'];
     }
 
-    if ($club['is_member']) {
-        return ['success' => false, 'message' => 'You are already a member of this club.'];
+    if ($clubs['is_member']) {
+        return ['success' => false, 'message' => 'You are already a member of this clubs.'];
     }
 
-    $capacity = $club['maxCapacity'];
+    $capacity = $clubs['maxCapacity'];
     if ($capacity === null || $capacity <= 0) {
-        return ['success' => false, 'message' => 'This club has no available slots.'];
+        return ['success' => false, 'message' => 'This clubs has no available slots.'];
     }
 
     $joinedDate = date('Y-m-d');
@@ -1012,12 +1012,12 @@ function joinClubAsStudent(int $userId, int $clubId): array
 
         $stmt->bind_param('iiss', $userId, $clubId, $joinedDate, $memberStatus);
         if (!$stmt->execute()) {
-            throw new Exception('Could not join club: ' . $stmt->error);
+            throw new Exception('Could not join clubs: ' . $stmt->error);
         }
         $stmt->close();
 
         $stmt = $conn->prepare(
-            'UPDATE club SET maxCapacity = maxCapacity - 1 WHERE Club_id = ? AND maxCapacity > 0'
+            'UPDATE clubs SET maxCapacity = maxCapacity - 1 WHERE Club_id = ? AND maxCapacity > 0'
         );
         if (!$stmt) {
             throw new Exception('Prepare failed (capacity): ' . $conn->error);
@@ -1025,13 +1025,13 @@ function joinClubAsStudent(int $userId, int $clubId): array
 
         $stmt->bind_param('i', $clubId);
         if (!$stmt->execute() || $stmt->affected_rows < 1) {
-            throw new Exception('No available slots for this club.');
+            throw new Exception('No available slots for this clubs.');
         }
         $stmt->close();
 
         $conn->commit();
 
-        return ['success' => true, 'message' => 'You have successfully joined the club.'];
+        return ['success' => true, 'message' => 'You have successfully joined the clubs.'];
     } catch (Exception $e) {
         $conn->rollback();
 
@@ -1040,7 +1040,7 @@ function joinClubAsStudent(int $userId, int $clubId): array
 }
 
 /**
- * All members enrolled in a club (for committee club management view).
+ * All members enrolled in a clubs (for committee clubs management view).
  *
  * @return list<array<string,mixed>>
  */
@@ -1103,7 +1103,7 @@ function getClubMembersByClubId(int $clubId): array
 }
 
 /**
- * All club committee assignments for listing.
+ * All clubs committee assignments for listing.
  *
  * @return array<int,array<string,mixed>>
  */
@@ -1121,10 +1121,10 @@ function getClubCommitteeAssignments(): array
             u.FullName,
             u.Student_id,
             c.Club_name,
-            cr.position AS Role_name
-        FROM clubcommitee cc
+            cr.Role_name
+        FROM clubcommittee cc
         INNER JOIN user u ON cc.User_id = u.User_id
-        INNER JOIN club c ON cc.Club_id = c.Club_id
+        INNER JOIN clubs c ON cc.Club_id = c.Club_id
         INNER JOIN commiteerole cr ON cc.Committee_role_id = cr.Committee_role_id
         ORDER BY cc.Assigned_date DESC, c.Club_name ASC, u.FullName ASC
     ";
@@ -1143,7 +1143,7 @@ function getClubCommitteeAssignments(): array
 }
 
 /**
- * Single club committee assignment by primary key.
+ * Single clubs committee assignment by primary key.
  *
  * @return array<string,mixed>|null
  */
@@ -1157,7 +1157,7 @@ function getClubCommitteeById(int $clubCommitteeId): ?array
 
     $stmt = $conn->prepare(
         'SELECT Club_committee_id, User_id, Club_id, Committee_role_id, Assigned_date
-         FROM clubcommitee WHERE Club_committee_id = ? LIMIT 1'
+         FROM clubcommittee WHERE Club_committee_id = ? LIMIT 1'
     );
     if (!$stmt) {
         return null;
@@ -1173,7 +1173,7 @@ function getClubCommitteeById(int $clubCommitteeId): ?array
 }
 
 /**
- * Update a club committee assignment.
+ * Update a clubs committee assignment.
  *
  * @return array{success:bool,message:string}
  */
@@ -1201,7 +1201,7 @@ function updateClubCommittee(
     }
 
     $stmt = $conn->prepare(
-        'SELECT 1 FROM clubcommitee
+        'SELECT 1 FROM clubcommittee
          WHERE User_id = ? AND Club_id = ? AND Club_committee_id <> ? LIMIT 1'
     );
     if (!$stmt) {
@@ -1215,7 +1215,7 @@ function updateClubCommittee(
     $stmt->close();
 
     if ($duplicate) {
-        return ['success' => false, 'message' => 'This member is already assigned to the selected club.'];
+        return ['success' => false, 'message' => 'This member is already assigned to the selected clubs.'];
     }
 
     $oldUserId = (int) $existing['User_id'];
@@ -1225,7 +1225,7 @@ function updateClubCommittee(
 
     try {
         $stmt = $conn->prepare(
-            'UPDATE clubcommitee
+            'UPDATE clubcommittee
              SET User_id = ?, Club_id = ?, Committee_role_id = ?, Assigned_date = ?
              WHERE Club_committee_id = ?'
         );
@@ -1263,7 +1263,7 @@ function updateClubCommittee(
 
         $conn->commit();
 
-        return ['success' => true, 'message' => 'Club committee assignment updated successfully.'];
+        return ['success' => true, 'message' => 'clubs committee assignment updated successfully.'];
     } catch (Exception $e) {
         $conn->rollback();
 
@@ -1272,7 +1272,7 @@ function updateClubCommittee(
 }
 
 /**
- * Delete a club committee assignment.
+ * Delete a clubs committee assignment.
  *
  * @return array{success:bool,message:string}
  */
@@ -1296,7 +1296,7 @@ function deleteClubCommittee(int $clubCommitteeId): array
 
     try {
         $stmt = $conn->prepare(
-            'DELETE FROM clubcommitee WHERE Club_committee_id = ?'
+            'DELETE FROM clubcommittee WHERE Club_committee_id = ?'
         );
         if (!$stmt) {
             throw new Exception('Prepare failed: ' . $conn->error);
@@ -1319,7 +1319,7 @@ function deleteClubCommittee(int $clubCommitteeId): array
 
         $conn->commit();
 
-        return ['success' => true, 'message' => 'Club committee assignment deleted successfully.'];
+        return ['success' => true, 'message' => 'clubs committee assignment deleted successfully.'];
     } catch (Exception $e) {
         $conn->rollback();
 
@@ -1550,7 +1550,7 @@ function edit($user_id)
 }
 
 /**
- * Club summary counts for the admin dashboard.
+ * clubs summary counts for the admin dashboard.
  *
  * @return array{total_students:int,active_clubs:int,inactive_clubs:int,total_members:int}
  */
@@ -1561,7 +1561,7 @@ function getClubDashboardStats(): array
     $totalClubs = 0;
     $activeClubs = 0;
 
-    $clubResult = $conn->query('SELECT * FROM club');
+    $clubResult = $conn->query('SELECT * FROM clubs');
     if ($clubResult) {
         while ($row = $clubResult->fetch_assoc()) {
             $totalClubs++;
@@ -1596,7 +1596,7 @@ function getClubDashboardStats(): array
 }
 
 /**
- * Student member count per club for dashboard chart.
+ * Student member count per clubs for dashboard chart.
  *
  * @return list<array{Club_name:string,student_count:int}>
  */
@@ -1606,7 +1606,7 @@ function getStudentDistributionByClub(): array
 
     $sql = "
         SELECT c.Club_name, COUNT(cm.User_id) AS student_count
-        FROM club c
+        FROM clubs c
         LEFT JOIN clubmember cm ON c.Club_id = cm.Club_id
         LEFT JOIN user u ON cm.User_id = u.User_id AND LOWER(u.role) = 'student'
         GROUP BY c.Club_id, c.Club_name
@@ -1630,18 +1630,18 @@ function getStudentDistributionByClub(): array
 }
 
 /**
- * Club ID for a committee user (supports getClubIdByCommittee($userId) or ($conn, $userId)).
+ * clubs ID for a committee user (supports getClubIdByCommittee($userId) or ($conn, $userId)).
  */
 function getClubIdByCommittee($userIdOrConn, $userId = null): ?int
 {
     $uid = $userId !== null ? (int) $userId : (int) $userIdOrConn;
-    $club = getCommitteeClubForUser($uid);
+    $clubs = getCommitteeClubForUser($uid);
 
-    return $club ? (int) $club['Club_id'] : null;
+    return $clubs ? (int) $clubs['Club_id'] : null;
 }
 
 /**
- * Events for one club (mysqli_result).
+ * Events for one clubs (mysqli_result).
  */
 function getEventsByClub($clubIdOrConn, $clubId = null)
 {
@@ -1737,7 +1737,7 @@ function getUpcomingEvents()
     return $conn->query(
         "SELECT e.*, c.Club_name
          FROM event e
-         INNER JOIN club c ON e.Club_id = c.Club_id
+         INNER JOIN clubs c ON e.Club_id = c.Club_id
          WHERE e.Deleted_at IS NULL
            AND LOWER(e.Event_Status) = 'upcoming'
            AND e.Event_Date >= NOW()
@@ -1793,7 +1793,7 @@ function getAllClubs()
     global $conn;
 
     return $conn->query(
-        'SELECT Club_id AS club_id, Club_name FROM club ORDER BY Club_name ASC'
+        'SELECT Club_id AS club_id, Club_name FROM clubs ORDER BY Club_name ASC'
     );
 }
 
@@ -1977,7 +1977,7 @@ function getStudentEventRegistrationHistory(int $userId): array
                 c.Club_name
          FROM event_registration er
          INNER JOIN event e ON er.Event_id = e.Event_id
-         INNER JOIN club c ON e.Club_id = c.Club_id
+         INNER JOIN clubs c ON e.Club_id = c.Club_id
          WHERE er.User_id = ? AND e.Deleted_at IS NULL
          ORDER BY e.Event_Date DESC"
     );
@@ -2033,7 +2033,7 @@ function cancelRegistration(int $userId, int $eventId): bool
 }
 
 /**
- * Event row with club name (for attendance / committee pages).
+ * Event row with clubs name (for attendance / committee pages).
  *
  * @return array<string,mixed>|null
  */
@@ -2048,7 +2048,7 @@ function getEventWithClub(int $eventId): ?array
     $stmt = $conn->prepare(
         'SELECT e.*, c.Club_name
          FROM event e
-         INNER JOIN club c ON e.Club_id = c.Club_id
+         INNER JOIN clubs c ON e.Club_id = c.Club_id
          WHERE e.Event_id = ? AND e.Deleted_at IS NULL
          LIMIT 1'
     );
@@ -2070,14 +2070,14 @@ function getEventWithClub(int $eventId): ?array
  */
 function committeeCanManageEvent(int $userId, int $eventId): bool
 {
-    $club = getCommitteeClubForUser($userId);
-    if (!$club) {
+    $clubs = getCommitteeClubForUser($userId);
+    if (!$clubs) {
         return false;
     }
 
     $event = getEventById($eventId);
 
-    return $event && (int) $event['Club_id'] === (int) $club['Club_id'];
+    return $event && (int) $event['Club_id'] === (int) $clubs['Club_id'];
 }
 
 /**
@@ -2222,7 +2222,7 @@ function getAttendanceByEventId(int $eventId)
 }
 
 /**
- * Attendance records for one club event.
+ * Attendance records for one clubs event.
  */
 function getAttendanceByEvent(string $clubName, string $eventName)
 {
@@ -2249,7 +2249,7 @@ function eventsPerClub()
 
     return $conn->query(
         "SELECT c.Club_name, COUNT(e.Event_id) AS total
-         FROM club c
+         FROM clubs c
          LEFT JOIN event e ON c.Club_id = e.Club_id AND e.Deleted_at IS NULL
          GROUP BY c.Club_id, c.Club_name
          ORDER BY total DESC"
@@ -2359,7 +2359,7 @@ function profile($conn, $user_id)
 
     $stmt->close();
 
-// COMMITTEE INFO
+    // COMMITTEE INFO
     if (
         $profile
         &&
@@ -2367,16 +2367,16 @@ function profile($conn, $user_id)
     ) {
 
         // FIXED: Changed 'cr.Role_name' to 'cr.position'
-        // FIXED: Changed 'clubcommittee' to 'clubcommitee'
-        // FIXED: Changed 'clubs' to 'club'
+        // FIXED: Changed 'clubcommittee' to 'clubcommittee'
+        // FIXED: Changed 'clubs' to 'clubs'
         $sql_committee = "
             SELECT
                 c.Club_name,
-                cr.position AS Role_name 
-            FROM clubcommitee cc
-            LEFT JOIN club c
+                cr.Role_name 
+            FROM clubcommittee cc
+            LEFT JOIN clubs c
                 ON cc.Club_id = c.Club_id
-            LEFT JOIN committee_roles cr
+            LEFT JOIN commiteerole cr
                 ON cc.Committee_role_id = cr.Committee_role_id
             WHERE cc.User_id = ?
         ";
@@ -2398,15 +2398,15 @@ function profile($conn, $user_id)
         }
     }
 
-    // CLUB MEMBERSHIP
-    // FIXED: Changed 'clubs' to 'club'
+    // clubs MEMBERSHIP
+    // FIXED: Changed 'clubs' to 'clubs'
     $sql_member = "
         SELECT
             c.Club_name,
             cm.Joined_date,
             cm.status
         FROM clubmember cm
-        LEFT JOIN club c
+        LEFT JOIN clubs c
             ON cm.Club_id = c.Club_id
         WHERE cm.User_id = ?
         AND cm.status = 'active'
@@ -2502,7 +2502,7 @@ function editProfile($conn, $user_id, $data, $file = null)
         LEFT JOIN clubs c
             ON cc.Club_id = c.Club_id
 
-        LEFT JOIN committee_roles cr
+        LEFT JOIN commiteerole cr
             ON cc.Committee_role_id =
             cr.Committee_role_id
 

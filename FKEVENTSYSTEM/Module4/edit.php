@@ -23,7 +23,7 @@ if (!$row) {
     exit;
 }
 
-if(isset($_POST['update_attendance'])){
+if (isset($_POST['update_attendance'])) {
 
     $student_name = $_POST['student_name'];
 
@@ -71,9 +71,8 @@ if(isset($_POST['update_attendance'])){
     $redirectEventId = $eventId > 0 ? $eventId : (int) ($_POST['event_id'] ?? 0);
     header(
         'Location: manage-event-attendance.php'
-        . ($redirectEventId > 0 ? '?event_id=' . $redirectEventId : '')
+            . ($redirectEventId > 0 ? '?event_id=' . $redirectEventId : '')
     );
-
 }
 
 ?>
@@ -83,306 +82,307 @@ if(isset($_POST['update_attendance'])){
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Edit Attendance</title>
+    <title>Edit Attendance</title>
 
-<link rel="stylesheet"
-href="style.css">
+    <link rel="stylesheet"
+        href="style.css">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<div class="navbar">
+        <div class="navbar">
 
-<div class="logo">
-    <img src="logo.png" alt="Logo">
-</div>
+            <div class="logo">
+                <img src="logo.png" alt="Logo">
+            </div>
 
-<div class="nav-menu">
+            <div class="nav-menu">
 
-<a href="index.php">
-Dashboard
-</a>
+                <a href="index.php">
+                    Dashboard
+                </a>
 
-<a href="manage-event-attendance.php"
-class="active">
+                <a href="manage-event-attendance.php"
+                    class="active">
 
-Attendance
+                    Attendance
 
-</a>
+                </a>
 
-<a href="participation-history.php">
-Participation History
-</a>
+                <a href="participation-history.php">
+                    Participation History
+                </a>
 
-<a href="top-student-ranking.php">
-Ranking
-</a>
+                <a href="top-student-ranking.php">
+                    Ranking
+                </a>
 
-<a href="report-overview.php">
-Reports
-</a>
+                <a href="report-overview.php">
+                    Reports
+                </a>
 
-<a href="participation-dashboard.php">
-Dashboard Analytics
-</a>
+                <a href="participation-dashboard.php">
+                    Dashboard Analytics
+                </a>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-<div class="content">
+        <div class="content">
 
-<h1>Edit Attendance</h1>
+            <h1>Edit Attendance</h1>
 
-<div class="form-container">
+            <div class="form-container">
 
-<form method="POST"
-class="modern-form">
+                <form method="POST"
+                    class="modern-form">
 
-<div class="form-row">
+                    <div class="form-row">
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Student Name</label>
+                            <label>Student Name</label>
 
-<input type="text"
-name="student_name"
+                            <input type="text"
+                                name="student_name"
 
-value="<?php
-echo $row['student_name'];
-?>"
+                                value="<?php
+                                        echo $row['student_name'];
+                                        ?>"
 
-required>
+                                required>
 
-</div>
+                        </div>
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Student ID</label>
+                            <label>Student ID</label>
 
-<input type="text"
-name="student_id"
+                            <input type="text"
+                                name="student_id"
 
-value="<?php
-echo $row['student_id'];
-?>"
+                                value="<?php
+                                        echo $row['student_id'];
+                                        ?>"
 
-required>
+                                required>
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<div class="form-row">
+                    <div class="form-row">
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Club Name</label>
+                            <label>clubs Name</label>
 
-<select name="club_name">
+                            <select name="club_name">
 
-<option
-<?php
-if($row['club_name']=="Programming & Coding Club")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['club_name'] == "Programming & Coding clubs")
+                                        echo "selected";
+                                    ?>>
 
-Programming & Coding Club
+                                    Programming & Coding clubs
 
-</option>
+                                </option>
 
-<option
-<?php
-if($row['club_name']=="Cyber Security Club")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['club_name'] == "Cyber Security clubs")
+                                        echo "selected";
+                                    ?>>
 
-Cyber Security Club
+                                    Cyber Security clubs
 
-</option>
+                                </option>
 
-<option
-<?php
-if($row['club_name']=="Data Science & AI Club")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['club_name'] == "Data Science & AI clubs")
+                                        echo "selected";
+                                    ?>>
 
-Data Science & AI Club
+                                    Data Science & AI clubs
 
-</option>
+                                </option>
 
-<option
-<?php
-if($row['club_name']=="Game Development Club")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['club_name'] == "Game Development clubs")
+                                        echo "selected";
+                                    ?>>
 
-Game Development Club
+                                    Game Development clubs
 
-</option>
+                                </option>
 
-<option
-<?php
-if($row['club_name']=="Cloud Computing Club")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['club_name'] == "Cloud Computing clubs")
+                                        echo "selected";
+                                    ?>>
 
-Cloud Computing Club
+                                    Cloud Computing clubs
 
-</option>
+                                </option>
 
-</select>
+                            </select>
 
-</div>
+                        </div>
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Event Name</label>
+                            <label>Event Name</label>
 
-<input type="text"
-name="event_name"
+                            <input type="text"
+                                name="event_name"
 
-value="<?php
-echo $row['event_name'];
-?>"
+                                value="<?php
+                                        echo $row['event_name'];
+                                        ?>"
 
-required>
+                                required>
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<div class="form-row">
+                    <div class="form-row">
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Attendance Date</label>
+                            <label>Attendance Date</label>
 
-<input type="date"
-name="attendance_date"
+                            <input type="date"
+                                name="attendance_date"
 
-value="<?php
-echo $row['attendance_date'];
-?>"
+                                value="<?php
+                                        echo $row['attendance_date'];
+                                        ?>"
 
-required>
+                                required>
 
-</div>
+                        </div>
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Attendance Time</label>
+                            <label>Attendance Time</label>
 
-<input type="time"
-name="attendance_time"
+                            <input type="time"
+                                name="attendance_time"
 
-value="<?php
-echo $row['attendance_time'];
-?>"
+                                value="<?php
+                                        echo $row['attendance_time'];
+                                        ?>"
 
-required>
+                                required>
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<div class="form-row">
+                    <div class="form-row">
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Attendance Status</label>
+                            <label>Attendance Status</label>
 
-<select name="attendance_status">
+                            <select name="attendance_status">
 
-<option
-<?php
-if($row['attendance_status']=="Present")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['attendance_status'] == "Present")
+                                        echo "selected";
+                                    ?>>
 
-Present
+                                    Present
 
-</option>
+                                </option>
 
-<option
-<?php
-if($row['attendance_status']=="Late")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['attendance_status'] == "Late")
+                                        echo "selected";
+                                    ?>>
 
-Late
+                                    Late
 
-</option>
+                                </option>
 
-<option
-<?php
-if($row['attendance_status']=="Absent")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['attendance_status'] == "Absent")
+                                        echo "selected";
+                                    ?>>
 
-Absent
+                                    Absent
 
-</option>
+                                </option>
 
-</select>
+                            </select>
 
-</div>
+                        </div>
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Volunteer / Helper</label>
+                            <label>Volunteer / Helper</label>
 
-<select name="volunteer_status">
+                            <select name="volunteer_status">
 
-<option
-<?php
-if($row['volunteer_status']=="No")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['volunteer_status'] == "No")
+                                        echo "selected";
+                                    ?>>
 
-No
+                                    No
 
-</option>
+                                </option>
 
-<option
-<?php
-if($row['volunteer_status']=="Yes")
-echo "selected";
-?>>
+                                <option
+                                    <?php
+                                    if ($row['volunteer_status'] == "Yes")
+                                        echo "selected";
+                                    ?>>
 
-Yes
+                                    Yes
 
-</option>
+                                </option>
 
-</select>
+                            </select>
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<button type="submit"
-name="update_attendance"
-class="submit-btn">
+                    <button type="submit"
+                        name="update_attendance"
+                        class="submit-btn">
 
-Update Attendance
+                        Update Attendance
 
-</button>
+                    </button>
 
-</form>
+                </form>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
 </body>
+
 </html>

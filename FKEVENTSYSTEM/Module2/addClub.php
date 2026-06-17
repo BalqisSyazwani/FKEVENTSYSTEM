@@ -33,7 +33,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['register_club
         content="width=device-width, initial-scale=1.0">
 
     <title>
-        Add Club
+        Add clubs
     </title>
 
     <!-- Bootstrap -->
@@ -64,11 +64,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['register_club
     <div class="add-user-container">
 
         <h1 class="add-user-title">
-            Add Club
+            Add clubs
         </h1>
 
         <p class="add-user-subtitle">
-            Register a new student club with advisor and status details.
+            Register a new student clubs with advisor and status details.
         </p>
 
         <div class="add-user-box">
@@ -86,12 +86,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['register_club
 
                     <div class="col-lg-6 mb-4">
                         <label class="form-label-custom">
-                            Club name
+                            clubs name
                         </label>
                         <input type="text"
                             name="club_name"
                             class="form-input-custom"
-                            placeholder="Enter club name"
+                            placeholder="Enter clubs name"
                             value="<?= htmlspecialchars($_POST['club_name'] ?? '') ?>"
                             required>
                     </div>
@@ -115,7 +115,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['register_club
                         <textarea name="description"
                             class="form-input-custom"
                             rows="4"
-                            placeholder="Enter club description"><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
+                            placeholder="Enter clubs description"><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
                     </div>
 
                     <div class="col-lg-6 mb-4">
@@ -133,7 +133,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['register_club
 
                     <div class="col-lg-6 mb-4">
                         <label class="form-label-custom">
-                            Club status
+                            clubs status
                         </label>
                         <select class="form-input-custom"
                             name="club_status"
@@ -156,7 +156,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['register_club
                         name="register_club"
                         class="save-btn">
                         <i class="bi bi-plus-circle-fill"></i>
-                        Add Club
+                        Add clubs
                     </button>
                     <a href="clubManagement.php"
                         class="cancel-btn text-decoration-none text-center">

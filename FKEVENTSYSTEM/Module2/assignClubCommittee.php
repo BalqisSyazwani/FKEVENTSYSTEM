@@ -9,7 +9,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['delete_assign
     $result = deleteClubCommittee((int) ($_POST['Club_committee_id'] ?? 0));
     header(
         'Location: assignClubCommittee.php?msg=' . urlencode($result['message'])
-        . '&msg_type=' . ($result['success'] ? 'success' : 'danger')
+            . '&msg_type=' . ($result['success'] ? 'success' : 'danger')
     );
     exit;
 }
@@ -42,7 +42,7 @@ $assignments = getClubCommitteeAssignments();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assign Club Committee</title>
+    <title>Assign clubs Committee</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../CSS/style.css">
@@ -57,7 +57,7 @@ $assignments = getClubCommitteeAssignments();
 
     <div class="add-user-container">
 
-        <h1 class="add-user-title">Assign Club Committee</h1>
+        <h1 class="add-user-title">Assign clubs Committee</h1>
         <p class="add-user-subtitle">
             Assign committee members to clubs with a role and start date.
         </p>
@@ -78,19 +78,19 @@ $assignments = getClubCommitteeAssignments();
                 <div class="row">
 
                     <div class="col-lg-6 mb-4">
-                        <label class="form-label-custom">Club name</label>
+                        <label class="form-label-custom">clubs name</label>
                         <select class="form-input-custom" name="club_id" required>
-                            <option value="">Select club</option>
+                            <option value="">Select clubs</option>
                             <?php
                             $clubs = getClubs();
                             if ($clubs && $clubs->num_rows > 0):
-                                while ($club = $clubs->fetch_assoc()):
-                                    ?>
-                                    <option value="<?= (int) $club['Club_id'] ?>"
-                                        <?= (($_POST['club_id'] ?? '') == $club['Club_id']) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($club['Club_name']) ?>
+                                while ($clubs = $clubs->fetch_assoc()):
+                            ?>
+                                    <option value="<?= (int) $clubs['Club_id'] ?>"
+                                        <?= (($_POST['club_id'] ?? '') == $clubs['Club_id']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($clubs['Club_name']) ?>
                                     </option>
-                                    <?php
+                            <?php
                                 endwhile;
                             endif;
                             ?>
@@ -105,13 +105,13 @@ $assignments = getClubCommitteeAssignments();
                             $committeeUsers = getCommitteeUsers();
                             if ($committeeUsers && $committeeUsers->num_rows > 0):
                                 while ($u = $committeeUsers->fetch_assoc()):
-                                    ?>
+                            ?>
                                     <option value="<?= (int) $u['User_id'] ?>"
                                         <?= (($_POST['user_id'] ?? '') == $u['User_id']) ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($u['FullName']) ?>
                                         (<?= htmlspecialchars($u['Student_id']) ?>)
                                     </option>
-                                    <?php
+                            <?php
                                 endwhile;
                             endif;
                             ?>
@@ -126,12 +126,12 @@ $assignments = getClubCommitteeAssignments();
                             $roles = getAssignedRoles();
                             if ($roles && $roles->num_rows > 0):
                                 while ($role = $roles->fetch_assoc()):
-                                    ?>
+                            ?>
                                     <option value="<?= (int) $role['Committee_role_id'] ?>"
                                         <?= (($_POST['committee_role'] ?? '') == $role['Committee_role_id']) ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($role['Role_name']) ?>
                                     </option>
-                                    <?php
+                            <?php
                                 endwhile;
                             endif;
                             ?>
@@ -159,11 +159,11 @@ $assignments = getClubCommitteeAssignments();
         </div>
 
         <div class="table-box mt-4">
-            <h5 class="text-white mb-3">Assigned club committees</h5>
+            <h5 class="text-white mb-3">Assigned clubs committees</h5>
             <table class="table custom-table align-middle">
                 <thead>
                     <tr>
-                        <th>Club name</th>
+                        <th>clubs name</th>
                         <th>Member name</th>
                         <th>Student ID</th>
                         <th>Committee role</th>

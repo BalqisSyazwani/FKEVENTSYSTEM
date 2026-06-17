@@ -59,7 +59,7 @@ $form = $assignment ?? [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Club Committee Assignment</title>
+    <title>Edit clubs Committee Assignment</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../CSS/style.css">
@@ -74,7 +74,7 @@ $form = $assignment ?? [
     <div class="add-user-container">
 
         <h1 class="add-user-title">Edit Committee Assignment</h1>
-        <p class="add-user-subtitle">Update club, member, role, or start date.</p>
+        <p class="add-user-subtitle">Update clubs, member, role, or start date.</p>
 
         <div class="add-user-box">
 
@@ -88,19 +88,19 @@ $form = $assignment ?? [
 
                     <div class="row">
                         <div class="col-lg-6 mb-4">
-                            <label class="form-label-custom">Club name</label>
+                            <label class="form-label-custom">clubs name</label>
                             <select class="form-input-custom" name="club_id" required>
-                                <option value="">Select club</option>
+                                <option value="">Select clubs</option>
                                 <?php
                                 $clubs = getClubs();
                                 if ($clubs && $clubs->num_rows > 0):
-                                    while ($club = $clubs->fetch_assoc()):
-                                        ?>
-                                        <option value="<?= (int) $club['Club_id'] ?>"
-                                            <?= ((string) ($form['Club_id'] ?? '') === (string) $club['Club_id']) ? 'selected' : '' ?>>
-                                            <?= htmlspecialchars($club['Club_name']) ?>
+                                    while ($clubs = $clubs->fetch_assoc()):
+                                ?>
+                                        <option value="<?= (int) $clubs['Club_id'] ?>"
+                                            <?= ((string) ($form['Club_id'] ?? '') === (string) $clubs['Club_id']) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($clubs['Club_name']) ?>
                                         </option>
-                                        <?php
+                                <?php
                                     endwhile;
                                 endif;
                                 ?>
@@ -115,13 +115,13 @@ $form = $assignment ?? [
                                 $committeeUsers = getCommitteeUsers();
                                 if ($committeeUsers && $committeeUsers->num_rows > 0):
                                     while ($u = $committeeUsers->fetch_assoc()):
-                                        ?>
+                                ?>
                                         <option value="<?= (int) $u['User_id'] ?>"
                                             <?= ((string) ($form['User_id'] ?? '') === (string) $u['User_id']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($u['FullName']) ?>
                                             (<?= htmlspecialchars($u['Student_id']) ?>)
                                         </option>
-                                        <?php
+                                <?php
                                     endwhile;
                                 endif;
                                 ?>
@@ -136,12 +136,12 @@ $form = $assignment ?? [
                                 $roles = getAssignedRoles();
                                 if ($roles && $roles->num_rows > 0):
                                     while ($role = $roles->fetch_assoc()):
-                                        ?>
+                                ?>
                                         <option value="<?= (int) $role['Committee_role_id'] ?>"
                                             <?= ((string) ($form['Committee_role_id'] ?? '') === (string) $role['Committee_role_id']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($role['Role_name']) ?>
                                         </option>
-                                        <?php
+                                <?php
                                     endwhile;
                                 endif;
                                 ?>

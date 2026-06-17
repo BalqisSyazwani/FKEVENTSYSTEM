@@ -86,7 +86,7 @@
     transform: translateY(-2px);
 }
 
-/* ================= CLUB NAV DROPDOWN (HOVER) ================= */
+/* ================= clubs NAV DROPDOWN (HOVER) ================= */
 
 .admin-nav-dropdown {
     position: relative;
@@ -110,7 +110,7 @@
     transition: 0.3s ease;
 }
 
-.admin-nav-dropdown-toggle i.bi-suit-club-fill,
+.admin-nav-dropdown-toggle i.bi-suit-clubs-fill,
 .admin-nav-dropdown-toggle i.bi-grid {
     font-size: 19px;
     color: black;

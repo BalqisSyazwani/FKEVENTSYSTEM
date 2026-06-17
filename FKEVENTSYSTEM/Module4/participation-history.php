@@ -4,28 +4,24 @@ include '../INCLUDE/db.php';
 
 $search = "";
 
-if(isset($_GET['search']) && $_GET['search'] != ""){
+if (isset($_GET['search']) && $_GET['search'] != "") {
 
     $search = $_GET['search'];
 
     $query =
 
-    "SELECT * FROM attendance
+        "SELECT * FROM attendance
 
     WHERE student_id LIKE '%$search%'
 
     ORDER BY id DESC";
-
-}
-
-else{
+} else {
 
     $query =
 
-    "SELECT * FROM attendance
+        "SELECT * FROM attendance
 
     ORDER BY id DESC";
-
 }
 
 $result = mysqli_query($conn, $query);
@@ -37,182 +33,177 @@ $result = mysqli_query($conn, $query);
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Participation History</title>
+    <title>Participation History</title>
 
-<link rel="stylesheet" href="../CSS/style.css">
-<link rel="stylesheet" href="../CSS/module4-dashboard.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="../CSS/adminHeader.css">
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/module4-dashboard.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../CSS/adminHeader.css">
 
 </head>
 
 <body>
 
-<?php include '../INCLUDE/AdminHeader.php'; ?>
+    <?php include '../INCLUDE/AdminHeader.php'; ?>
 
-<div class="container">
+    <div class="container">
 
-<!-- CONTENT -->
+        <!-- CONTENT -->
 
-<div class="content">
+        <div class="content">
 
-<h1>Participation History</h1>
+            <h1>Participation History</h1>
 
-<!-- SEARCH -->
+            <!-- SEARCH -->
 
-<div class="form-container">
+            <div class="form-container">
 
-<form method="GET"
-class="modern-form">
+                <form method="GET"
+                    class="modern-form">
 
-<div class="form-row">
+                    <div class="form-row">
 
-<div class="form-group">
+                        <div class="form-group">
 
-<label>Search Student ID</label>
+                            <label>Search Student ID</label>
 
-<input type="text"
+                            <input type="text"
 
-name="search"
+                                name="search"
 
-placeholder="Enter Student ID"
+                                placeholder="Enter Student ID"
 
-value="<?php
-echo $search;
-?>">
+                                value="<?php
+                                        echo $search;
+                                        ?>">
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<div class="action-buttons">
+                    <div class="action-buttons">
 
-<button type="submit"
-class="submit-btn">
+                        <button type="submit"
+                            class="submit-btn">
 
-Search
+                            Search
 
-</button>
+                        </button>
 
-<a href="../Module4/participation-history.php"
-class="edit-btn">
+                        <a href="../Module4/participation-history.php"
+                            class="edit-btn">
 
-Show All
+                            Show All
 
-</a>
+                        </a>
 
-</div>
+                    </div>
 
-</form>
+                </form>
 
-</div>
+            </div>
 
-<!-- TABLE -->
+            <!-- TABLE -->
 
-<div class="table-wrapper">
+            <div class="table-wrapper">
 
-<table>
+                <table>
 
-<tr>
+                    <tr>
 
-<th>Student ID</th>
-<th>Club Name</th>
-<th>Event Name</th>
-<th>Date</th>
-<th>Status</th>
-<th>Volunteer</th>
-<th>Points</th>
-<th>Recognition</th>
+                        <th>Student ID</th>
+                        <th>clubs Name</th>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Volunteer</th>
+                        <th>Points</th>
+                        <th>Recognition</th>
 
-</tr>
+                    </tr>
 
-<?php
+                    <?php
 
-while($row = mysqli_fetch_assoc($result)){
+                    while ($row = mysqli_fetch_assoc($result)) {
 
-$recognition = "";
+                        $recognition = "";
 
-if($row['points'] < 20){
+                        if ($row['points'] < 20) {
 
-    $recognition = "Warning";
+                            $recognition = "Warning";
+                        } elseif (
+                            $row['points'] >= 20
+                            && $row['points'] <= 49
+                        ) {
 
-}
+                            $recognition =
+                                "Participation Certificate";
+                        } elseif (
+                            $row['points'] >= 50
+                            && $row['points'] <= 79
+                        ) {
 
-elseif($row['points'] >= 20
-&& $row['points'] <= 49){
+                            $recognition =
+                                "Active Student";
+                        } else {
 
-    $recognition =
-    "Participation Certificate";
+                            $recognition =
+                                "Outstanding Participant";
+                        }
 
-}
+                    ?>
 
-elseif($row['points'] >= 50
-&& $row['points'] <= 79){
+                        <tr>
 
-    $recognition =
-    "Active Student";
+                            <td>
+                                <?php echo $row['student_id']; ?>
+                            </td>
 
-}
+                            <td>
+                                <?php echo $row['club_name']; ?>
+                            </td>
 
-else{
+                            <td>
+                                <?php echo $row['event_name']; ?>
+                            </td>
 
-    $recognition =
-    "Outstanding Participant";
+                            <td>
+                                <?php echo $row['attendance_date']; ?>
+                            </td>
 
-}
+                            <td>
+                                <?php echo $row['attendance_status']; ?>
+                            </td>
 
-?>
+                            <td>
+                                <?php echo $row['volunteer_status']; ?>
+                            </td>
 
-<tr>
+                            <td>
+                                <?php echo $row['points']; ?>
+                            </td>
 
-<td>
-<?php echo $row['student_id']; ?>
-</td>
+                            <td>
+                                <?php echo $recognition; ?>
+                            </td>
 
-<td>
-<?php echo $row['club_name']; ?>
-</td>
+                        </tr>
 
-<td>
-<?php echo $row['event_name']; ?>
-</td>
+                    <?php } ?>
 
-<td>
-<?php echo $row['attendance_date']; ?>
-</td>
+                </table>
 
-<td>
-<?php echo $row['attendance_status']; ?>
-</td>
+            </div>
 
-<td>
-<?php echo $row['volunteer_status']; ?>
-</td>
+        </div>
 
-<td>
-<?php echo $row['points']; ?>
-</td>
-
-<td>
-<?php echo $recognition; ?>
-</td>
-
-</tr>
-
-<?php } ?>
-
-</table>
-
-</div>
-
-</div>
-
-</div>
+    </div>
 
 </body>
+
 </html>

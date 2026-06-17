@@ -7,7 +7,7 @@ if (empty($_SESSION['user']['User_id']) || strtolower((string) ($_SESSION['user'
 }
 
 $navBase = '../';
-$activeNav = 'club';
+$activeNav = 'clubs';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,7 +68,7 @@ $activeNav = 'club';
 
 
                 <h2>
-                    CLUB COMMITTEE MEMBERS
+                    clubs COMMITTEE MEMBERS
                 </h2>
 
                 <button class="dashboard-btn">
@@ -83,7 +83,7 @@ $activeNav = 'club';
             <div class="col-lg-6 text-center">
 
                 <img src="../IMG/logo.png"
-                    alt="FK Club Logo"
+                    alt="FK clubs Logo"
                     class="dashboard-logo">
 
             </div>
