@@ -115,14 +115,23 @@
             <div class="profile-left">
 
                 <!-- PROFILE IMAGE -->
-                <div class="profile-image">
-                    <?php if (!empty($profile['Profile_photo'])):
-                        $photoPath = normalizeProfilePhotoPath($profile['Profile_photo']); ?>
-                        <img src="<?= htmlspecialchars($photoPath) ?>" alt="Profile Photo" style="width:206px;height:250px;border-radius:50%;object-fit:cover;">
-                    <?php else: ?>
-                        <i class="bi bi-person-fill"></i>
-                    <?php endif; ?>
+                <div class="profile-image" style="width:206px;height:250px;display:flex;align-items:center;justify-content:center;">
+                    <?php
+                    $imgStyle = 'width:206px;height:250px;border-radius:50%;object-fit:cover;';
+                    if (!empty($profile['Profile_photo'])) {
+                        $photoPath = normalizeProfilePhotoPath($profile['Profile_photo']);
+                    ?>
+                        <img src="<?= htmlspecialchars($photoPath) ?>" alt="Profile Photo" style="<?= $imgStyle ?>">
+                    <?php
+                    } else {
+                        // Use a default image for all users if no profile photo
+                    ?>
+                        <img src="assets/default-profile.png" alt="Default Profile Photo" style="<?= $imgStyle ?>">
+                    <?php
+                    }
+                    ?>
                 </div>
+
 
                 <!-- NAME -->
                 <h3>
