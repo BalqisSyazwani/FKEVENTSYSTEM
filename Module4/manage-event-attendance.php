@@ -16,7 +16,7 @@ $flashType = 'success';
 
 if ($eventId <= 0 || !committeeCanManageEvent($userId, $eventId)) {
     header(
-        'Location: ../Module3/clubEvents.php?msg='
+        'Location: ../FKEVENTSYSTEM/Module3/clubEvents.php?msg='
             . urlencode('Invalid event or you are not allowed to manage attendance for this event.')
             . '&msg_type=danger'
     );
@@ -26,7 +26,7 @@ if ($eventId <= 0 || !committeeCanManageEvent($userId, $eventId)) {
 $eventContext = getEventWithClub($eventId);
 if (!$eventContext) {
     header(
-        'Location: ../Module3/clubEvents.php?msg='
+        'Location: ../FKEVENTSYSTEM/Module3/clubEvents.php?msg='
             . urlencode('Event not found.')
             . '&msg_type=danger'
     );

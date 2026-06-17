@@ -122,7 +122,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         </div>
         <script>
             setTimeout(function() {
-                window.location.href = "../Module1/profile.php";
+                window.location.href = "../FKEVENTSYSTEM/Module1/profile.php";
             }, 1800);
         </script>
     <?php else: ?>

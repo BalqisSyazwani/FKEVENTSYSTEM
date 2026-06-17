@@ -1,13 +1,26 @@
 <?php
 require_once __DIR__ . '/../INCLUDE/db.php';
 
-if (empty($_SESSION['user']['User_id']) || strtolower((string) ($_SESSION['user']['role'] ?? '')) !== 'student') {
+if (empty($_SESSION['user']['User_id']) || !in_array(strtolower((string) ($_SESSION['user']['role'] ?? '')), ['student', 'committee'], true)) {
     header('Location: ../login.php');
     exit;
 }
 
+$role = strtolower((string) ($_SESSION['user']['role'] ?? ''));
+$isStudent = $role === 'student';
+
 $userId = (int) $_SESSION['user']['User_id'];
-$events = getUpcomingEvents();
+
+$eventsResult = getUpcomingEvents();
+$eventsList = [];
+if ($eventsResult) {
+    while ($row = $eventsResult->fetch_assoc()) {
+        $eventsList[] = $row;
+    }
+}
+$clubOptions = array_values(array_unique(array_column($eventsList, 'Club_name')));
+sort($clubOptions);
+
 $registrationHistory = getStudentEventRegistrationHistory($userId);
 $navBase = '../';
 $activeTab = ($_GET['tab'] ?? '') === 'history' ? 'history' : 'events';
@@ -34,7 +47,11 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
 
 <body>
 
-    <?php include __DIR__ . '/../INCLUDE/StudentHeader.php'; ?>
+    <?php if ($isStudent): ?>
+        <?php include __DIR__ . '/../INCLUDE/StudentHeader.php'; ?>
+    <?php else: ?>
+        <?php include __DIR__ . '/../INCLUDE/CommitteeHeader.php'; ?>
+    <?php endif; ?>
 
     <div class="user-container">
         <div class="top-flex">
@@ -75,17 +92,45 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
 
         <div class="tab-content mt-4">
             <div class="tab-pane fade <?= $activeTab === 'events' ? 'show active' : '' ?>" id="events" role="tabpanel">
-                <div class="row">
-                    <?php
-                    $hasUpcoming = $events && $events->num_rows > 0;
-                    if ($hasUpcoming):
-                        while ($event = $events->fetch_assoc()):
+                <?php if (count($eventsList) > 0): ?>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-5">
+                            <input type="text"
+                                id="eventSearchInput"
+                                class="form-input-custom"
+                                placeholder="Search by event name or venue...">
+                        </div>
+                        <div class="col-md-4">
+                            <select id="eventClubFilter" class="form-input-custom">
+                                <option value="">All clubs</option>
+                                <?php foreach ($clubOptions as $clubName): ?>
+                                    <option value="<?= htmlspecialchars($clubName) ?>"><?= htmlspecialchars($clubName) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="eventAvailabilityFilter" class="form-input-custom">
+                                <option value="">All availability</option>
+                                <option value="open">Open slots only</option>
+                                <option value="full">Full only</option>
+                            </select>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <div class="row" id="eventCardGrid">
+                    <?php if (count($eventsList) > 0): ?>
+                        <?php foreach ($eventsList as $event): ?>
+                            <?php
                             $current = countRegistrations((int) $event['Event_id']);
                             $full = ($current >= (int) $event['Student_Capacity']);
                             $registered = isRegistered($userId, (int) $event['Event_id']);
                             $waiting = isWaiting($userId, (int) $event['Event_id']);
-                    ?>
-                            <div class="col-md-4 mb-4">
+                            ?>
+                            <div class="col-md-4 mb-4 event-card-wrapper"
+                                data-name="<?= htmlspecialchars(strtolower($event['Event_Name'])) ?>"
+                                data-venue="<?= htmlspecialchars(strtolower($event['Venue'])) ?>"
+                                data-club="<?= htmlspecialchars($event['Club_name']) ?>"
+                                data-full="<?= $full ? '1' : '0' ?>">
                                 <div class="event-card">
                                     <h4><?= htmlspecialchars($event['Event_Name']) ?></h4>
                                     <div class="organiser">
@@ -124,10 +169,13 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                                     </div>
                                 </div>
                             </div>
-                        <?php
-                        endwhile;
-                    else:
-                        ?>
+                        <?php endforeach; ?>
+                        <div class="col-12" id="noEventsMatch" style="display:none;">
+                            <div class="add-user-box">
+                                <p class="text-white mb-0">No events match your search or filters.</p>
+                            </div>
+                        </div>
+                    <?php else: ?>
                         <div class="col-12">
                             <div class="add-user-box">
                                 <p class="text-white mb-0">No upcoming events at the moment.</p>
@@ -221,6 +269,60 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function() {
+            var searchInput = document.getElementById('eventSearchInput');
+            var clubFilter = document.getElementById('eventClubFilter');
+            var availFilter = document.getElementById('eventAvailabilityFilter');
+            var cards = Array.prototype.slice.call(document.querySelectorAll('.event-card-wrapper'));
+            var noMatch = document.getElementById('noEventsMatch');
+
+            if (!searchInput || !clubFilter || !availFilter) {
+                return;
+            }
+
+            function applyFilters() {
+                var term = searchInput.value.trim().toLowerCase();
+                var club = clubFilter.value;
+                var avail = availFilter.value;
+                var visibleCount = 0;
+
+                cards.forEach(function(card) {
+                    var name = card.dataset.name || '';
+                    var venue = card.dataset.venue || '';
+                    var cardClub = card.dataset.club || '';
+                    var isFull = card.dataset.full === '1';
+
+                    var matches = true;
+                    if (term && name.indexOf(term) === -1 && venue.indexOf(term) === -1) {
+                        matches = false;
+                    }
+                    if (club && cardClub !== club) {
+                        matches = false;
+                    }
+                    if (avail === 'open' && isFull) {
+                        matches = false;
+                    }
+                    if (avail === 'full' && !isFull) {
+                        matches = false;
+                    }
+
+                    card.style.display = matches ? '' : 'none';
+                    if (matches) {
+                        visibleCount++;
+                    }
+                });
+
+                if (noMatch) {
+                    noMatch.style.display = visibleCount === 0 ? '' : 'none';
+                }
+            }
+
+            searchInput.addEventListener('input', applyFilters);
+            clubFilter.addEventListener('change', applyFilters);
+            availFilter.addEventListener('change', applyFilters);
+        })();
+    </script>
 </body>
 
 </html>

@@ -118,6 +118,11 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                                     </td>
                                     <td>
                                         <div class="action-flex justify-content-center">
+                                            <a href="../Module3/waitingList.php?event_id=<?= (int) $event['Event_id'] ?>"
+                                                class="edit-btn"
+                                                title="View waiting list">
+                                                <i class="bi bi-hourglass-split"></i>
+                                            </a>
                                             <a href="../Module3/editEvent.php?event_id=<?= (int) $event['Event_id'] ?>"
                                                 class="edit-btn"
                                                 title="Edit event">

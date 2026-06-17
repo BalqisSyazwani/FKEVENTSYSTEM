@@ -15,8 +15,8 @@ $isClubNavActive = in_array($currentAdminPage, $clubNavPages, true);
 
 $dashboardNavPages = ['dashboard.php', 'eventDashboard.php'];
 $isDashboardNavActive = in_array($currentAdminPage, $dashboardNavPages, true);
-$dashboardPageUrl = '../Module1/dashboard.php';
-$eventDashboardUrl = '../Module3/eventDashboard.php';
+$dashboardPageUrl = '/FKEVENTSYSTEM/Module1/dashboard.php';
+$eventDashboardUrl = '/FKEVENTSYSTEM/Module3/eventDashboard.php';
 
 $reportsNavPages = [
     'index.php',
@@ -27,7 +27,7 @@ $reportsNavPages = [
     'participation-dashboard.php',
 ];
 $isReportsNavActive = in_array($currentAdminPage, $reportsNavPages, true);
-$reportsPageUrl = '../Module4/index.php';
+$reportsPageUrl = '/FKEVENTSYSTEM/Module4/index.php';
 ?>
 
 <nav class="admin-navbar">
@@ -35,7 +35,7 @@ $reportsPageUrl = '../Module4/index.php';
     <!-- ================= LEFT ================= -->
     <div class="admin-nav-left">
 
-        <a href="admin.php">
+        <a href="/FKEVENTSYSTEM/Module1/admin.php">
 
             <i class="bi bi-code-slash"></i>
 
@@ -82,7 +82,7 @@ $reportsPageUrl = '../Module4/index.php';
                     Events
                 </a>
 
-                <a href="../Module4/participation-dashboard.php"
+                <a href="/FKEVENTSYSTEM/Module4/participation-dashboard.php"
                     class="<?= $currentAdminPage === 'participation-dashboard.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-bar-chart-line"></i>
@@ -94,7 +94,7 @@ $reportsPageUrl = '../Module4/index.php';
 
         </div>
 
-        <a href="../Module1/userManagement.php">
+        <a href="/FKEVENTSYSTEM/Module1/userManagement.php">
 
             <i class="bi bi-people"></i>
             User Management
@@ -116,7 +116,7 @@ $reportsPageUrl = '../Module4/index.php';
 
             <div class="admin-nav-dropdown-menu">
 
-                <a href="../Module2/clubManagement.php"
+                <a href="/FKEVENTSYSTEM/Module2/clubManagement.php"
                     class="<?= $currentAdminPage === 'clubManagement.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-list-ul"></i>
@@ -124,7 +124,7 @@ $reportsPageUrl = '../Module4/index.php';
 
                 </a>
 
-                <a href="../Module2/assignClubCommittee.php"
+                <a href="/FKEVENTSYSTEM/Module2/assignClubCommittee.php"
                     class="<?= $currentAdminPage === 'assignClubCommittee.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-person-badge"></i>
@@ -151,7 +151,7 @@ $reportsPageUrl = '../Module4/index.php';
 
             <div class="admin-nav-dropdown-menu">
 
-                <a href="../Module4/index.php"
+                <a href="/FKEVENTSYSTEM/Module4/index.php"
                     class="<?= $currentAdminPage === 'index.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-grid"></i>
@@ -159,7 +159,7 @@ $reportsPageUrl = '../Module4/index.php';
 
                 </a>
 
-                <!-- <a href="../Module4/manage-event-attendance.php"
+                <!-- <a href="/FKEVENTSYSTEM/Module4/manage-event-attendance.php"
                     class="<?= $currentAdminPage === 'manage-event-attendance.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-journal-check"></i>
@@ -167,7 +167,7 @@ $reportsPageUrl = '../Module4/index.php';
 
                 </a> -->
 
-                <a href="../Module4/participation-history.php"
+                <a href="/FKEVENTSYSTEM/Module4/participation-history.php"
                     class="<?= $currentAdminPage === 'participation-history.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-clock-history"></i>
@@ -175,7 +175,7 @@ $reportsPageUrl = '../Module4/index.php';
 
                 </a>
 
-                <a href="../Module4/top-student-ranking.php"
+                <a href="/FKEVENTSYSTEM/Module4/top-student-ranking.php"
                     class="<?= $currentAdminPage === 'top-student-ranking.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-award"></i>
@@ -183,7 +183,7 @@ $reportsPageUrl = '../Module4/index.php';
 
                 </a>
 
-                <a href="../Module4/report-overview.php"
+                <a href="/FKEVENTSYSTEM/Module4/report-overview.php"
                     class="<?= $currentAdminPage === 'report-overview.php' ? 'active-sub-nav' : '' ?>">
 
                     <i class="bi bi-graph-up"></i>
@@ -268,7 +268,7 @@ $reportsPageUrl = '../Module4/index.php';
                 </div>
 
                 <!-- PROFILE -->
-                <a href="../Module1/profile.php">
+                <a href="/FKEVENTSYSTEM/Module1/profile.php">
 
                     <i class="bi bi-person-circle"></i>
                     View Profile
@@ -276,7 +276,7 @@ $reportsPageUrl = '../Module4/index.php';
                 </a>
 
                 <!-- LOGOUT -->
-                <a href="../Module1/login.php"
+                <a href="/FKEVENTSYSTEM/Module1/login.php"
                     class="admin-logout-btn">
 
                     <i class="bi bi-box-arrow-right"></i>

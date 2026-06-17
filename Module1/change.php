@@ -12,7 +12,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Check if the user is logged in
 if (!isset($_SESSION['user']['User_id'])) {
-    header("Location: ../Module1/login.php");
+    header("Location: ../FKEVENTSYSTEM/Module1/login.php");
     exit();
 }
 

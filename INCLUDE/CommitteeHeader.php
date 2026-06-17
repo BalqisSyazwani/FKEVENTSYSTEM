@@ -35,7 +35,7 @@ $profile = $user_id ? profile($conn, (int) $user_id) : null;
     <!-- ================= CENTER ================= -->
     <div class="admin-nav-center">
 
-        <a href="<?= htmlspecialchars($navBase) ?>Module2/manageClubCommittee.php"
+        <a href="/FKEVENTSYSTEM/Module2/manageClubCommittee.php"
             class="<?= $activeNav === 'club' ? 'active-admin-nav' : '' ?>">
 
             <i class="bi bi-suit-club-fill"></i>
@@ -43,7 +43,7 @@ $profile = $user_id ? profile($conn, (int) $user_id) : null;
 
         </a>
 
-        <a href="<?= htmlspecialchars($navBase) ?>Module3/clubEvents.php"
+        <a href="/FKEVENTSYSTEM/Module3/clubEvents.php"
             class="<?= $activeNav === 'events' ? 'active-admin-nav' : '' ?>">
 
             <i class="bi bi-ticket-perforated"></i>

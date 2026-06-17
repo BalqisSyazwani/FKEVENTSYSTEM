@@ -2033,6 +2033,147 @@ function cancelRegistration(int $userId, int $eventId): bool
 }
 
 /**
+ * Promote the longest-waiting, not-yet-converted student for an event into
+ * a confirmed registration. Intended to be called whenever a slot opens up
+ * (e.g. right after a registered student cancels).
+ *
+ * @return int The promoted student's User_id, or 0 if there was nobody to
+ *             promote or the promotion failed (e.g. event still full).
+ */
+function convertFirstWaitingToRegistered(int $eventId): int
+{
+    global $conn;
+
+    // Get the oldest waiting user for this event (who hasn't been converted yet)
+    $stmt = $conn->prepare(
+        "SELECT User_id FROM waiting_list
+         WHERE Event_id = ? AND Converted_Flag = 0
+         ORDER BY Waiting_Date ASC LIMIT 1"
+    );
+    if (!$stmt) {
+        return 0;
+    }
+
+    $stmt->bind_param('i', $eventId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
+
+    if (!$row) {
+        return 0;
+    }
+
+    $userId = (int) $row['User_id'];
+
+    // Begin transaction
+    $conn->begin_transaction();
+
+    try {
+        // Register the user
+        $registerOk = registerStudentForEvent($userId, $eventId);
+        if (!$registerOk) {
+            throw new Exception("Failed to register waiting user.");
+        }
+
+        // Mark as converted
+        $stmt2 = $conn->prepare(
+            "UPDATE waiting_list SET Converted_Flag = 1, Notified_Flag = 1
+             WHERE User_id = ? AND Event_id = ?"
+        );
+        if (!$stmt2) {
+            throw new Exception("Prepare failed.");
+        }
+
+        $stmt2->bind_param('ii', $userId, $eventId);
+        if (!$stmt2->execute()) {
+            throw new Exception("Update failed.");
+        }
+        $stmt2->close();
+
+        $conn->commit();
+        return $userId;
+    } catch (Exception $e) {
+        $conn->rollback();
+        return 0;
+    }
+}
+
+/**
+ * Active (not yet converted) waiting list entries for an event, oldest first.
+ *
+ * @return list<array<string,mixed>>
+ */
+function getWaitingListForEvent(int $eventId): array
+{
+    global $conn;
+    $stmt = $conn->prepare(
+        "SELECT wl.*, u.FullName, u.Student_id
+         FROM waiting_list wl
+         INNER JOIN user u ON wl.User_id = u.User_id
+         WHERE wl.Event_id = ? AND wl.Converted_Flag = 0
+         ORDER BY wl.Waiting_Date ASC"
+    );
+    if (!$stmt) {
+        return [];
+    }
+    $stmt->bind_param('i', $eventId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $list = [];
+    while ($row = $result->fetch_assoc()) {
+        $list[] = $row;
+    }
+    $stmt->close();
+    return $list;
+}
+
+/**
+ * Manually promote a specific waiting list entry to a confirmed registration
+ * (used by committee/admin staff, e.g. to move a particular student up).
+ *
+ * @return array{success:bool,message:string}
+ */
+function convertWaitingToRegistered(int $waitingId): array
+{
+    global $conn;
+    if ($waitingId <= 0) {
+        return ['success' => false, 'message' => 'Invalid ID.'];
+    }
+
+    // Get the user and event from the waiting entry
+    $stmt = $conn->prepare("SELECT User_id, Event_id FROM waiting_list WHERE WaitList_Id = ? AND Converted_Flag = 0");
+    $stmt->bind_param('i', $waitingId);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+    if (!$row) {
+        return ['success' => false, 'message' => 'Entry not found or already converted.'];
+    }
+
+    $userId = (int) $row['User_id'];
+    $eventId = (int) $row['Event_id'];
+
+    $conn->begin_transaction();
+    try {
+        if (!registerStudentForEvent($userId, $eventId)) {
+            throw new Exception('Failed to register. The event may already be full.');
+        }
+        $stmt = $conn->prepare("UPDATE waiting_list SET Converted_Flag = 1, Notified_Flag = 1 WHERE WaitList_Id = ?");
+        $stmt->bind_param('i', $waitingId);
+        if (!$stmt->execute()) {
+            throw new Exception('Update failed.');
+        }
+        $stmt->close();
+        $conn->commit();
+        return ['success' => true, 'message' => 'Student moved to registered.'];
+    } catch (Exception $e) {
+        $conn->rollback();
+        return ['success' => false, 'message' => $e->getMessage()];
+    }
+}
+
+/**
  * Event row with club name (for attendance / committee pages).
  *
  * @return array<string,mixed>|null

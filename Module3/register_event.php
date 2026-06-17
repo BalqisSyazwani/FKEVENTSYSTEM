@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../INCLUDE/db.php';
 
-if (empty($_SESSION['user']['User_id']) || strtolower((string) ($_SESSION['user']['role'] ?? '')) !== 'student') {
+if (empty($_SESSION['user']['User_id']) || !in_array(strtolower((string) ($_SESSION['user']['role'] ?? '')), ['student', 'committee'], true)) {
     header('Location: ../login.php');
     exit;
 }

@@ -71,11 +71,11 @@ $activeNav = 'club';
                     club COMMITTEE MEMBERS
                 </h2>
 
-                <button class="dashboard-btn">
+                <a href="/FKEVENTSYSTEM/Module3/eventList.php" class="dashboard-btn text-decoration-none d-inline-block">
 
                     View Upcoming Events
 
-                </button>
+                </a>
 
             </div>
 
