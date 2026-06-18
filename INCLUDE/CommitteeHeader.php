@@ -24,7 +24,7 @@ $profile = $user_id ? profile($conn, (int) $user_id) : null;
     <!-- ================= LEFT ================= -->
     <div class="admin-nav-left">
 
-        <a href="/FKEVENTSYSTEM/Module1/committee.php">
+        <a href="../Module1/committee.php">
 
             <i class="bi bi-code-slash"></i>
 
@@ -35,7 +35,7 @@ $profile = $user_id ? profile($conn, (int) $user_id) : null;
     <!-- ================= CENTER ================= -->
     <div class="admin-nav-center">
 
-        <a href="/FKEVENTSYSTEM/Module2/manageClubCommittee.php"
+        <a href="../Module2/manageClubCommittee.php"
             class="<?= $activeNav === 'club' ? 'active-admin-nav' : '' ?>">
 
             <i class="bi bi-suit-club-fill"></i>
@@ -43,7 +43,7 @@ $profile = $user_id ? profile($conn, (int) $user_id) : null;
 
         </a>
 
-        <a href="/FKEVENTSYSTEM/Module3/clubEvents.php"
+        <a href="../Module3/clubEvents.php"
             class="<?= $activeNav === 'events' ? 'active-admin-nav' : '' ?>">
 
             <i class="bi bi-ticket-perforated"></i>
@@ -111,12 +111,12 @@ $profile = $user_id ? profile($conn, (int) $user_id) : null;
 
                 </div>
 
-                <a href="/FKEVENTSYSTEM/Module1/profile.php">
+                <a href="../Module1/profile.php">
                     <i class="bi bi-person-circle"></i>
                     View Profile
                 </a>
 
-                <a href="/FKEVENTSYSTEM/Module1/login.php"
+                <a href="../Module1/login.php"
                     class="admin-logout-btn">
                     <i class="bi bi-box-arrow-right"></i>
                     Sign Out

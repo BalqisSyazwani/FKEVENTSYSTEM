@@ -199,16 +199,23 @@ function insertClub(
 
     $createdAt = date('Y-m-d H:i:s');
 
+    $nextIdResult = $conn->query('SELECT COALESCE(MAX(Club_id), 0) + 1 AS next_id FROM club');
+    if (!$nextIdResult) {
+        return ['success' => false, 'message' => 'Database error: ' . $conn->error];
+    }
+
+    $nextClubId = (int) ($nextIdResult->fetch_assoc()['next_id'] ?? 1);
+
     $stmt = $conn->prepare(
-        'INSERT INTO club (Club_name, Description, advisorName, clubStatus, maxCapacity, Created_at)
-         VALUES (?, ?, ?, ?, ?, ?)'
+        'INSERT INTO club (Club_id, Club_name, Description, advisorName, clubStatus, maxCapacity, Created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)'
     );
 
     if (!$stmt) {
         return ['success' => false, 'message' => 'Database error: ' . $conn->error];
     }
 
-    $stmt->bind_param('ssssis', $clubName, $description, $advisorName, $status, $maxCapacity, $createdAt);
+    $stmt->bind_param('issssis', $nextClubId, $clubName, $description, $advisorName, $status, $maxCapacity, $createdAt);
 
     if ($stmt->execute()) {
         $stmt->close();
