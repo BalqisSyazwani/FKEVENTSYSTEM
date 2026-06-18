@@ -639,7 +639,7 @@ function getAssignedRoles()
 {
     global $conn;
 
-    $sql = "SELECT Committee_role_id, position AS Role_name FROM commiteerole ORDER BY position ASC";
+    $sql = "SELECT Committee_role_id, Role_name FROM commiteerole ORDER BY Role_name ASC";
     $result = $conn->query($sql);
 
     return $result;
@@ -782,7 +782,7 @@ function getCommitteeClubForUser(int $userId): ?array
     }
 
     $stmt = $conn->prepare(
-        'SELECT c.*, cc.Assigned_date, cr.position AS Role_name
+        'SELECT c.*, cc.Assigned_date, cr.Role_name
          FROM clubcommittee cc
          INNER JOIN club c ON cc.Club_id = c.Club_id
          LEFT JOIN commiteerole cr ON cc.Committee_role_id = cr.Committee_role_id
@@ -1132,7 +1132,7 @@ function getClubCommitteeAssignments(): array
             u.FullName,
             u.Student_id,
             c.Club_name,
-            cr.position AS Role_name
+            cr.Role_name
         FROM clubcommittee cc
         INNER JOIN user u ON cc.User_id = u.User_id
         INNER JOIN club c ON cc.Club_id = c.Club_id
@@ -2537,7 +2537,7 @@ function profile($conn, $user_id)
         $sql_committee = "
             SELECT
                 c.Club_name,
-                cr.position AS Role_name
+                cr.Role_name
             FROM clubcommittee cc
             LEFT JOIN club c
                 ON cc.Club_id = c.Club_id
@@ -2660,7 +2660,7 @@ function editProfile($conn, $user_id, $data, $file = null)
 
         SELECT
             c.Club_name,
-            cr.position AS Role_name
+            cr.Role_name
 
         FROM clubcommittee cc
 

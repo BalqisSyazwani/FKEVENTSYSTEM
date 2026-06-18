@@ -295,7 +295,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                                             }
 
                                             // Query committee role name
-                                            $stmt3 = $conn->prepare("SELECT position FROM commiteerole WHERE Committee_role_id = ?");
+                                            $stmt3 = $conn->prepare("SELECT Role_name FROM commiteerole WHERE Committee_role_id = ?");
                                             if ($stmt3) {
                                                 $stmt3->bind_param("i", $committee_role_id);
                                                 $stmt3->execute();
