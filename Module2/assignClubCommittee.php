@@ -9,7 +9,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['delete_assign
     $result = deleteClubCommittee((int) ($_POST['Club_committee_id'] ?? 0));
     header(
         'Location: assignClubCommittee.php?msg=' . urlencode($result['message'])
-            . '&msg_type=' . ($result['success'] ? 'success' : 'danger')
+        . '&msg_type=' . ($result['success'] ? 'success' : 'danger')
     );
     exit;
 }
@@ -42,13 +42,13 @@ $assignments = getClubCommitteeAssignments();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assign club Committee</title>
+    <title>Assign Club Committee</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="../CSS/adminHeader.css">
-    <link rel="stylesheet" href="../CSS/addUser.css">
-    <link rel="stylesheet" href="../CSS/UserManagement.css">
+    <link rel="stylesheet" href="../CSS/addUser.css?v=3">
+    <link rel="stylesheet" href="../CSS/UserManagement.css?v=3">
 </head>
 
 <body>
@@ -57,9 +57,9 @@ $assignments = getClubCommitteeAssignments();
 
     <div class="add-user-container">
 
-        <h1 class="add-user-title">Assign club Committee</h1>
+        <h1 class="add-user-title">Assign Club Committee</h1>
         <p class="add-user-subtitle">
-            Assign committee members to club with a role and start date.
+            Assign committee members to clubs with a role and start date.
         </p>
 
         <div class="add-user-box">
@@ -78,19 +78,19 @@ $assignments = getClubCommitteeAssignments();
                 <div class="row">
 
                     <div class="col-lg-6 mb-4">
-                        <label class="form-label-custom">club name</label>
+                        <label class="form-label-custom">Club name</label>
                         <select class="form-input-custom" name="club_id" required>
                             <option value="">Select club</option>
                             <?php
-                            $club = getClubs();
-                            if ($club && $club->num_rows > 0):
-                                while ($club = $club->fetch_assoc()):
-                            ?>
+                            $clubs = getClubs();
+                            if ($clubs && $clubs->num_rows > 0):
+                                while ($club = $clubs->fetch_assoc()):
+                                    ?>
                                     <option value="<?= (int) $club['Club_id'] ?>"
                                         <?= (($_POST['club_id'] ?? '') == $club['Club_id']) ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($club['Club_name']) ?>
                                     </option>
-                            <?php
+                                    <?php
                                 endwhile;
                             endif;
                             ?>
@@ -105,13 +105,13 @@ $assignments = getClubCommitteeAssignments();
                             $committeeUsers = getCommitteeUsers();
                             if ($committeeUsers && $committeeUsers->num_rows > 0):
                                 while ($u = $committeeUsers->fetch_assoc()):
-                            ?>
+                                    ?>
                                     <option value="<?= (int) $u['User_id'] ?>"
                                         <?= (($_POST['user_id'] ?? '') == $u['User_id']) ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($u['FullName']) ?>
                                         (<?= htmlspecialchars($u['Student_id']) ?>)
                                     </option>
-                            <?php
+                                    <?php
                                 endwhile;
                             endif;
                             ?>
@@ -126,12 +126,12 @@ $assignments = getClubCommitteeAssignments();
                             $roles = getAssignedRoles();
                             if ($roles && $roles->num_rows > 0):
                                 while ($role = $roles->fetch_assoc()):
-                            ?>
+                                    ?>
                                     <option value="<?= (int) $role['Committee_role_id'] ?>"
                                         <?= (($_POST['committee_role'] ?? '') == $role['Committee_role_id']) ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($role['Role_name']) ?>
                                     </option>
-                            <?php
+                                    <?php
                                 endwhile;
                             endif;
                             ?>
@@ -163,7 +163,7 @@ $assignments = getClubCommitteeAssignments();
             <table class="table custom-table align-middle">
                 <thead>
                     <tr>
-                        <th>club name</th>
+                        <th>Club name</th>
                         <th>Member name</th>
                         <th>Student ID</th>
                         <th>Committee role</th>
