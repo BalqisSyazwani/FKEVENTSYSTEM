@@ -7,90 +7,100 @@ include '../INCLUDE/db.php';
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Top Student Ranking</title>
+    <title>Top Student Ranking</title>
 
-<link rel="stylesheet" href="../CSS/style.css">
-<link rel="stylesheet" href="../CSS/module4-dashboard.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="../CSS/adminHeader.css">
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/module4-dashboard.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../CSS/adminHeader.css">
 
 </head>
 
 <body>
 
-<?php include '../INCLUDE/AdminHeader.php'; ?>
+    <?php include '../INCLUDE/AdminHeader.php'; ?>
 
-<div class="container">
+    <div class="container">
 
-<div class="content">
+        <div class="content">
 
-<h1>Top Student Ranking</h1>
+            <h1>Top Student Ranking</h1>
 
-<div class="table-wrapper">
+            <div class="table-wrapper">
 
-<table>
+                <table>
 
-<tr>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Student ID</th>
+                        <th>Total Points</th>
+                        <th>Recognition</th>
+                    </tr>
 
-<th>Rank</th>
-<th>Student ID</th>
-<th>Total Points</th>
+                    <?php
 
-</tr>
+                    $query = "
+                    SELECT student_id,
+                           SUM(points) AS total_points
+                    FROM attendance
+                    GROUP BY student_id
+                    ORDER BY total_points DESC
+                ";
 
-<?php
+                    $result = mysqli_query($conn, $query);
 
-$query = "
+                    $rank = 1;
 
-SELECT student_id,
-SUM(points) AS total_points
+                    while ($row = mysqli_fetch_assoc($result)) {
 
-FROM attendance
+                        $points = $row['total_points'];
 
-GROUP BY student_id
+                        // Recognition based on Table B
+                        if ($points < 20) {
+                            $recognition = "Warning";
+                        } elseif ($points >= 20 && $points <= 49) {
+                            $recognition = "Participation Certificate";
+                        } elseif ($points >= 50 && $points <= 79) {
+                            $recognition = "Active Student Award";
+                        } else {
+                            $recognition = "Outstanding Participant";
+                        }
+                    ?>
 
-ORDER BY total_points DESC
+                        <tr>
 
-";
+                            <td>
+                                <?php echo $rank++; ?>
+                            </td>
 
-$result = mysqli_query($conn, $query);
+                            <td>
+                                <?php echo $row['student_id']; ?>
+                            </td>
 
-$rank = 1;
+                            <td>
+                                <?php echo $row['total_points']; ?>
+                            </td>
 
-while($row = mysqli_fetch_assoc($result)){
+                            <td>
+                                <?php echo $recognition; ?>
+                            </td>
 
-?>
+                        </tr>
 
-<tr>
+                    <?php } ?>
 
-<td>
-<?php echo $rank++; ?>
-</td>
+                </table>
 
-<td>
-<?php echo $row['student_id']; ?>
-</td>
+            </div>
 
-<td>
-<?php echo $row['total_points']; ?>
-</td>
+        </div>
 
-</tr>
-
-<?php } ?>
-
-</table>
-
-</div>
-
-</div>
-
-</div>
+    </div>
 
 </body>
+
 </html>
