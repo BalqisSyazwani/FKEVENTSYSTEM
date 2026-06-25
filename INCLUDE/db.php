@@ -1822,6 +1822,52 @@ function getAllEvents($unused = null)
     );
 }
 
+/**
+ * Search/filter events (used by club Events management page).
+ */
+function searchClubEvents($filter = null, $keyword = null)
+{
+    global $conn;
+
+    // Allowed columns for safety
+    $allowed_filters = [
+        'Event_Name',
+        'Venue',
+        'Event_Status',
+    ];
+
+    $sql = "SELECT * FROM event WHERE Deleted_at IS NULL";
+    $params = [];
+    $types = '';
+
+    if (
+        !empty($filter) &&
+        !empty($keyword) &&
+        in_array($filter, $allowed_filters, true)
+    ) {
+        $sql .= " AND $filter LIKE ?";
+        $params[] = '%' . $keyword . '%';
+        $types = 's';
+    }
+
+    $sql .= " ORDER BY Event_Date DESC";
+
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Prepare failed in searchClubEvents(): " . $conn->error);
+    }
+
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
+
+    if (!$stmt->execute()) {
+        die("Execute failed in searchClubEvents(): " . $stmt->error);
+    }
+
+    return $stmt->get_result();
+}
+
 function getEventById(int $eventId): ?array
 {
     global $conn;
@@ -2217,9 +2263,10 @@ function convertFirstWaitingToRegistered(int $eventId): int
             throw new Exception("Failed to register waiting user.");
         }
 
-        // Mark as converted
+        // Mark as converted — Notified_Flag stays 0 (pending) so the
+        // student sees a "you've been promoted" notification next visit
         $stmt2 = $conn->prepare(
-            "UPDATE waiting_list SET Converted_Flag = 1, Notified_Flag = 1
+            "UPDATE waiting_list SET Converted_Flag = 1, Notified_Flag = 0
              WHERE User_id = ? AND Event_id = ?"
         );
         if (!$stmt2) {
@@ -2295,12 +2342,24 @@ function convertWaitingToRegistered(int $waitingId): array
     $userId = (int) $row['User_id'];
     $eventId = (int) $row['Event_id'];
 
+    // Refuse up front if the event has no open slot — avoids a confusing
+    // failed-transaction round trip and gives a clear message to the committee.
+    $event = getEventById($eventId);
+    if (!$event) {
+        return ['success' => false, 'message' => 'Event not found.'];
+    }
+    if (countRegistrations($eventId) >= (int) $event['Student_Capacity']) {
+        return ['success' => false, 'message' => 'Cannot promote — the event is already full.'];
+    }
+
     $conn->begin_transaction();
     try {
         if (!registerStudentForEvent($userId, $eventId)) {
             throw new Exception('Failed to register. The event may already be full.');
         }
-        $stmt = $conn->prepare("UPDATE waiting_list SET Converted_Flag = 1, Notified_Flag = 1 WHERE WaitList_Id = ?");
+        // Notified_Flag stays 0 (pending) so the student sees a
+        // "you've been promoted" notification next time they log in.
+        $stmt = $conn->prepare("UPDATE waiting_list SET Converted_Flag = 1, Notified_Flag = 0 WHERE WaitList_Id = ?");
         $stmt->bind_param('i', $waitingId);
         if (!$stmt->execute()) {
             throw new Exception('Update failed.');
@@ -2311,6 +2370,69 @@ function convertWaitingToRegistered(int $waitingId): array
     } catch (Exception $e) {
         $conn->rollback();
         return ['success' => false, 'message' => $e->getMessage()];
+    }
+}
+
+/**
+ * Pending "you've been promoted" notifications for a user — waiting list
+ * entries that were converted to registered but not yet shown to them.
+ *
+ * @return list<array<string,mixed>>
+ */
+function getPendingPromotionNotifications(int $userId): array
+{
+    global $conn;
+
+    if ($userId <= 0) {
+        return [];
+    }
+
+    $stmt = $conn->prepare(
+        "SELECT wl.WaitList_Id, e.Event_Name, e.Event_Date
+         FROM waiting_list wl
+         JOIN event e ON e.Event_id = wl.Event_id
+         WHERE wl.User_id = ?
+           AND wl.Converted_Flag = 1
+           AND wl.Notified_Flag = 0
+         ORDER BY wl.Waiting_Date DESC"
+    );
+    if (!$stmt) {
+        return [];
+    }
+
+    $stmt->bind_param('i', $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $notifications = [];
+    while ($row = $result->fetch_assoc()) {
+        $notifications[] = $row;
+    }
+    $stmt->close();
+
+    return $notifications;
+}
+
+/**
+ * Mark all of a user's pending promotion notifications as seen.
+ */
+function markPromotionsSeen(int $userId): void
+{
+    global $conn;
+
+    if ($userId <= 0) {
+        return;
+    }
+
+    $stmt = $conn->prepare(
+        "UPDATE waiting_list
+         SET Notified_Flag = 1
+         WHERE User_id = ? AND Converted_Flag = 1 AND Notified_Flag = 0"
+    );
+    if ($stmt) {
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $stmt->close();
     }
 }
 
