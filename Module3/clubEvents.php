@@ -10,12 +10,10 @@ $userId = (int) $_SESSION['user']['User_id'];
 $club = getCommitteeClubForUser($userId);
 $eventList = [];
 
-$eventsResult = $conn->query("
-    SELECT *
-    FROM event
-    WHERE Deleted_at IS NULL
-    ORDER BY Event_Date DESC
-");
+$searchFilter = $_GET['search_filter'] ?? '';
+$searchKeyword = $_GET['search_keyword'] ?? '';
+
+$eventsResult = searchClubEvents($searchFilter, $searchKeyword);
 
 if ($eventsResult) {
     while ($row = $eventsResult->fetch_assoc()) {
@@ -84,6 +82,46 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                 </div>
             </div>
         <?php else: ?>
+            <div class="search-box">
+                <h5>Search Events</h5>
+                <form method="GET" action="">
+                    <div class="search-flex">
+
+                        <select class="search-select" name="search_filter">
+                            <option value="">Select filter</option>
+                            <option value="Event_Name" <?= ($searchFilter === 'Event_Name') ? 'selected' : '' ?>>
+                                Event title
+                            </option>
+                            <option value="Venue" <?= ($searchFilter === 'Venue') ? 'selected' : '' ?>>
+                                Venue
+                            </option>
+                            <option value="Event_Status" <?= ($searchFilter === 'Event_Status') ? 'selected' : '' ?>>
+                                Status
+                            </option>
+                        </select>
+
+                        <input type="text"
+                            name="search_keyword"
+                            class="search-input"
+                            placeholder="Enter keyword..."
+                            value="<?= htmlspecialchars($searchKeyword) ?>">
+
+                        <button type="submit" class="search-btn">
+                            <i class="bi bi-search"></i>
+                            Search
+                        </button>
+
+                        <?php if ($searchFilter !== '' || $searchKeyword !== ''): ?>
+                            <a href="clubEvents.php" class="cancel-btn text-decoration-none d-inline-flex align-items-center gap-2">
+                                <i class="bi bi-x-circle"></i>
+                                Clear
+                            </a>
+                        <?php endif; ?>
+
+                    </div>
+                </form>
+            </div>
+
             <div class="table-box mt-4">
                 <h5 class="text-white mb-3">All Events</h5>
                 <table class="table custom-table align-middle">
@@ -145,7 +183,9 @@ $flashType = in_array($_GET['msg_type'] ?? '', ['success', 'danger'], true)
                         <?php else: ?>
                             <tr>
                                 <td colspan="6" class="text-center">
-                                    No events yet. Create your first event for this club.
+                                    <?= ($searchFilter !== '' || $searchKeyword !== '')
+                                        ? 'No events match your search.'
+                                        : 'No events yet. Create your first event for this club.' ?>
                                 </td>
                             </tr>
                         <?php endif; ?>
