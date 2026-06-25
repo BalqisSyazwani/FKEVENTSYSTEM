@@ -39,17 +39,6 @@ $navBase = '../';
 
     <?php include __DIR__ . '/../INCLUDE/StudentHeader.php'; ?>
 
-    <div class="admin-nav-center">
-        <a href="<?= htmlspecialchars($navBase) ?>../Module2/viewClubListStudent.php" class="active-admin-nav">
-            <i class="bi bi-suit-club-fill"></i>
-            Club List
-        </a>
-        <a href="<?= htmlspecialchars($navBase) ?>../Module3/eventList.php">
-            <i class="bi bi-ticket-perforated"></i>
-            Events List
-        </a>
-    </div>
-
     <div class="user-container">
 
         <div class="top-flex">

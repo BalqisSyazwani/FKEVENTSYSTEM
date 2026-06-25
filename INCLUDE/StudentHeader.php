@@ -20,11 +20,7 @@ if (!isset($navBase)) {
     <!-- ================= CENTER ================= -->
     <div class="admin-nav-center">
 
-<<<<<<< HEAD
         <a href="../Module2/viewClubListStudent.php"
-=======
-        <a href="/FKEVENTSYSTEM/Module2/viewClubListStudent.php"
->>>>>>> fc43f699ebb163efeeedf23ed8f58b951eee374a
             class="active-admin-nav">
 
             <i class="bi bi-suit-club-fill"></i>
@@ -32,11 +28,7 @@ if (!isset($navBase)) {
 
         </a>
 
-<<<<<<< HEAD
         <a href="../Module3/eventList.php">
-=======
-        <a href="/FKEVENTSYSTEM/Module3/eventList.php">
->>>>>>> fc43f699ebb163efeeedf23ed8f58b951eee374a
 
             <i class="bi bi-ticket-perforated"></i>
             Events List
@@ -118,7 +110,6 @@ if (!isset($navBase)) {
 
 
                 </div>
-<<<<<<< HEAD
                                 
                 <!-- PROFILE -->
                 <a href="../Module1/profile.php">
@@ -131,24 +122,6 @@ if (!isset($navBase)) {
                     <i class="bi bi-box-arrow-right"></i>
                     Sign Out
                 </a>
-=======
-                <!-- TODO: Add logout button -->
-
-                <!-- PROFILE -->
-                <a href="/FKEVENTSYSTEM/Module1/profile.php">
-
-                    <a href="/FKEVENTSYSTEM/Module1/profile.php">
-                        <i class="bi bi-person-circle"></i>
-                        View Profile
-                    </a>
-
-                    <!-- TODO: Add logout button -->
-                    <a href="/FKEVENTSYSTEM/Module1/login.php"
-                        class="admin-logout-btn">
-                        <i class="bi bi-box-arrow-right"></i>
-                        Sign Out
-                    </a>
->>>>>>> fc43f699ebb163efeeedf23ed8f58b951eee374a
 
             </div>
 
