@@ -116,7 +116,6 @@ if (!isset($navBase)) {
                 <a href="/FKEVENTSYSTEM/Module1/profile.php">
 
                     <a href="/FKEVENTSYSTEM/Module1/profile.php">
-                        >>>>>>> 9e839b41486cef72535edbf0008d1603da3af96f
                         <i class="bi bi-person-circle"></i>
                         View Profile
                     </a>

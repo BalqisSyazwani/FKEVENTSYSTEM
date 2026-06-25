@@ -3,20 +3,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include '../INCLUDE/db.php';
 
-$id = (int)($_GET['id'] ?? 0);
-$event_id = (int)($_GET['event_id'] ?? 0);
+$data = edit($conn, $_GET['user_id'] ?? 0);
 
-$stmt = $conn->prepare("SELECT * FROM attendance WHERE id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-
-$result = $stmt->get_result();
-$attendance = $result->fetch_assoc();
-
-$stmt->close();
-
-$success = '';
-$error = '';
+$user = $data['user'];
+$success = $data['success'];
+$error = $data['error'];
 
 ?>
 
@@ -91,7 +82,7 @@ $error = '';
 
             <?php endif; ?>
 
-            <?php if ($user): ?>
+            <?php if (isset($user)): ?>
 
                 <!-- FORM BOX -->
                 <div class="add-user-box">
