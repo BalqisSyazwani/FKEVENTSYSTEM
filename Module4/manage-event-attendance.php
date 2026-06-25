@@ -16,7 +16,7 @@ $flashType = 'success';
 
 if ($eventId <= 0 || !committeeCanManageEvent($userId, $eventId)) {
     header(
-        'Location: ../FKEVENTSYSTEM/Module3/clubEvents.php?msg='
+        'Location: ../Module3/clubEvents.php?msg='
             . urlencode('Invalid event or you are not allowed to manage attendance for this event.')
             . '&msg_type=danger'
     );
