@@ -92,6 +92,7 @@ include '../INCLUDE/db.php';
                     $insert_success = insertUser($student_id, $fullname, $ic_number, $phone, $email, $role, $club_id, $committee_role);
                     if ($insert_success === true) {
                         $insert_message = "User registered successfully!";
+                        header("Location: ../Module1/userManagement.php");
                         // Clear values post-successful register
                         $_POST = [];
                     } else {
