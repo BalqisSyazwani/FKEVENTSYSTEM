@@ -1,5 +1,3 @@
-<!-- addUser.php -->
-
 <?php
 include '../INCLUDE/db.php';
 ?>
@@ -41,7 +39,7 @@ include '../INCLUDE/db.php';
 <body>
 
     <!-- HEADER -->
-    <?php include '../INCLUDE/AdminHeader.php'; ?>
+    <?php include '../INCLUDE/adminHeader.php'; ?>
 
     <div class="add-user-container">
 
@@ -76,10 +74,11 @@ include '../INCLUDE/db.php';
                 // Use lowercase key as per HTML input name!
                 if ($role === 'committee') {
                     $club_id = !empty($_POST['club_id']) ? $_POST['club_id'] : null;
+                    $committee_role = !empty($_POST['committee_role_id']) ? $_POST['committee_role_id'] : null;
                 } else {
                     $club_id = null;
+                    $committee_role = null;
                 }
-                $committee_role = null;
 
                 // Basic validation
                 if (empty($student_id) || empty($fullname) || empty($ic_number) || empty($phone) || empty($email) || empty($role)) {
@@ -92,7 +91,7 @@ include '../INCLUDE/db.php';
                     $insert_success = insertUser($student_id, $fullname, $ic_number, $phone, $email, $role, $club_id, $committee_role);
                     if ($insert_success === true) {
                         $insert_message = "User registered successfully!";
-                        header("Location: ../Module1/userManagement.php");
+                        echo "<script>window.location.href='../Module1/userManagement.php';</script>";
                         // Clear values post-successful register
                         $_POST = [];
                     } else {
@@ -204,7 +203,7 @@ include '../INCLUDE/db.php';
                         <!-- club (committee position is assigned under club → Assign club Committee) -->
                         <div class="col-lg-12 mb-4">
                             <label class="form-label-custom">
-                                club Name
+                                Club Name
                             </label>
                             <select class="form-input-custom"
                                 name="club_id">
@@ -212,21 +211,50 @@ include '../INCLUDE/db.php';
                                     Select club
                                 </option>
                                 <?php
-                                $club = getClubs();
-                                if ($club && $club->num_rows > 0) {
-                                    while ($row = $club->fetch_assoc()) {
+                                // Use getClubs (from db.php) to populate the clubs list
+                                $clubs = getClubs();
+                                if ($clubs && $clubs->num_rows > 0) {
+                                    while ($row = $clubs->fetch_assoc()) {
                                 ?>
                                         <option value="<?= htmlspecialchars($row['Club_id']); ?>" <?= (isset($_POST['club_id']) && $_POST['club_id'] == $row['Club_id']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($row['Club_name']); ?>
                                         </option>
-                                <?php }
-                                } ?>
+                                <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <!-- Committee Role -->
+                        <div class="col-lg-12 mb-4">
+                            <label class="form-label-custom">
+                                Committee Role
+                            </label>
+                            <select class="form-input-custom"
+                                name="committee_role_id">
+                                <option value="">
+                                    Select committee role
+                                </option>
+                                <?php
+                                // Use getCommitteeRoles (from db.php) to populate the roles list
+                                $committeeRoles = getCommitteeRoles();
+                                if ($committeeRoles && $committeeRoles->num_rows > 0) {
+                                    while ($row = $committeeRoles->fetch_assoc()) {
+                                ?>
+                                        <option value="<?= htmlspecialchars($row['Committee_role_id']); ?>" <?= (isset($_POST['committee_role_id']) && $_POST['committee_role_id'] == $row['Committee_role_id']) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($row['Role_name']); ?>
+                                        </option>
+                                <?php
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
 
                     </div>
-
                 </div>
+
 
                 <div class="submit-flex">
                     <button type="submit"

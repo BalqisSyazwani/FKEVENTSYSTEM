@@ -2,16 +2,8 @@
 
 include 'config.php';
 
-function insertUser(
-    $student_id,
-    $fullname,
-    $ic_number,
-    $phone,
-    $email,
-    $role,
-    $club_id,
-    $committee_role_id
-) {
+function insertUser($student_id, $fullname, $ic_number, $phone, $email, $role, $club_id, $committee_role_id)
+{
     global $conn;
 
     // Default password = hashed student id
@@ -151,6 +143,16 @@ function getClubs()
     global $conn;
 
     $sql = "SELECT * FROM club";
+    $result = $conn->query($sql);
+
+    return $result;
+}
+
+function getCommitteeRoles()
+{
+    global $conn;
+
+    $sql = "SELECT * FROM commiteerole";
     $result = $conn->query($sql);
 
     return $result;
@@ -2356,23 +2358,23 @@ function insertEventAttendanceRecord(
     );
     $ok = $stmt->execute();
     $stmt->close();
-if ($ok) {
+    if ($ok) {
 
-    $updateUser = $conn->prepare("
+        $updateUser = $conn->prepare("
         UPDATE user
         SET points = points + ?
         WHERE Student_id = ?
     ");
 
-    $updateUser->bind_param(
-        "is",
-        $points,
-        $studentId
-    );
+        $updateUser->bind_param(
+            "is",
+            $points,
+            $studentId
+        );
 
-    $updateUser->execute();
-    $updateUser->close();
-}
+        $updateUser->execute();
+        $updateUser->close();
+    }
     return $ok;
 }
 
