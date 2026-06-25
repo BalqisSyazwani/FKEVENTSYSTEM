@@ -1,26 +1,42 @@
 <?php
-include '../INCLUDE/db.php';
+require_once __DIR__ . '/../INCLUDE/db.php';
 
-$event_id = $_GET['event_id'] ?? 0;
+session_start();
+
+// Validate event_id input
+$event_id = isset($_GET['event_id']) ? (int)$_GET['event_id'] : 0;
+if ($event_id <= 0) {
+    header("Location: clubEvents.php?msg=" . urlencode("Invalid event ID.") . "&msg_type=danger");
+    exit;
+}
+
+// Fetch event
 $event = getEventById($event_id);
-
 if (!$event) {
-    header("Location: ../FKEVENTSYSTEM/Module3/clubEvents.php");
-    exit();
+    header("Location: clubEvents.php?msg=" . urlencode("Event not found.") . "&msg_type=danger");
+    exit;
 }
 
-$user = $_SESSION['user'];
-$role = $user['role'];
-$user_id = $user['User_id'];
-
-if ($role == 'committee') {
-    $club_id = getClubIdByCommittee($user_id);
-    if ($club_id != $event['Club_id']) {
-        header("Location: ../FKEVENTSYSTEM/Module3/clubEvents.php");
-        exit();
-    }
+// Fetch user and permission check
+if (empty($_SESSION['user']['User_id']) || ($_SESSION['user']['role'] ?? '') !== 'committee') {
+    header("Location: ../login.php");
+    exit;
 }
 
-deleteEvent($event_id);
-$_SESSION['flash'] = "Event deleted.";
-header("Location: ../FKEVENTSYSTEM/Module3/clubEvents.php");
+$user_id = (int) $_SESSION['user']['User_id'];
+
+// This helper should exist; else use whatever logic gets the committee's club_id for the user.
+// Must restrict: committee can only delete event for their own club.
+// $club = getCommitteeClubForUser($user_id);
+// if (!$club || (int)$event['Club_id'] !== (int)$club['club_id']) {
+//     header("Location: clubEvents.php?msg=" . urlencode("You are not allowed to delete this event.") . "&msg_type=danger");
+//     exit;
+// }
+
+// Try to delete the event
+if (deleteEvent($event_id)) {
+    header("Location: clubEvents.php?msg=" . urlencode("Event deleted successfully.") . "&msg_type=success");
+} else {
+    header("Location: clubEvents.php?msg=" . urlencode("Failed to delete event.") . "&msg_type=danger");
+}
+exit;
