@@ -1,6 +1,6 @@
 <!-- editAssignClubCommittee.php -->
 <?php
-require_once '../INCLUDE/db.php';
+require_once __DIR__ . '/../INCLUDE/db.php';
 
 $clubCommitteeId = (int) ($_GET['Club_committee_id'] ?? $_POST['Club_committee_id'] ?? 0);
 $assignment = getClubCommitteeById($clubCommitteeId);
@@ -52,6 +52,12 @@ $form = $assignment ?? [
     'Committee_role_id' => '',
     'Assigned_date' => date('Y-m-d'),
 ];
+
+$currentUserId = (int) ($form['User_id'] ?? 0);
+$assignedDate = $form['Assigned_date'] ?? '';
+if ($assignedDate !== '' && strpos((string) $assignedDate, ' ') !== false) {
+    $assignedDate = substr((string) $assignedDate, 0, 10);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -88,17 +94,17 @@ $form = $assignment ?? [
 
                     <div class="row">
                         <div class="col-lg-6 mb-4">
-                            <label class="form-label-custom">club name</label>
+                            <label class="form-label-custom">Club name</label>
                             <select class="form-input-custom" name="club_id" required>
                                 <option value="">Select club</option>
                                 <?php
-                                $club = getClubs();
-                                if ($club && $club->num_rows > 0):
-                                    while ($club = $club->fetch_assoc()):
+                                $clubs = getClubs();
+                                if ($clubs && $clubs->num_rows > 0):
+                                    while ($clubRow = $clubs->fetch_assoc()):
                                 ?>
-                                        <option value="<?= (int) $club['Club_id'] ?>"
-                                            <?= ((string) ($form['Club_id'] ?? '') === (string) $club['Club_id']) ? 'selected' : '' ?>>
-                                            <?= htmlspecialchars($club['Club_name']) ?>
+                                        <option value="<?= (int) $clubRow['Club_id'] ?>"
+                                            <?= ((int) ($form['Club_id'] ?? 0) === (int) $clubRow['Club_id']) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($clubRow['Club_name']) ?>
                                         </option>
                                 <?php
                                     endwhile;
@@ -112,12 +118,12 @@ $form = $assignment ?? [
                             <select class="form-input-custom" name="user_id" required>
                                 <option value="">Select committee member</option>
                                 <?php
-                                $committeeUsers = getCommitteeUsers();
+                                $committeeUsers = getCommitteeUsersForAssignment($currentUserId > 0 ? $currentUserId : null);
                                 if ($committeeUsers && $committeeUsers->num_rows > 0):
                                     while ($u = $committeeUsers->fetch_assoc()):
                                 ?>
                                         <option value="<?= (int) $u['User_id'] ?>"
-                                            <?= ((string) ($form['User_id'] ?? '') === (string) $u['User_id']) ? 'selected' : '' ?>>
+                                            <?= ((int) ($form['User_id'] ?? 0) === (int) $u['User_id']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($u['FullName']) ?>
                                             (<?= htmlspecialchars($u['Student_id']) ?>)
                                         </option>
@@ -138,7 +144,7 @@ $form = $assignment ?? [
                                     while ($role = $roles->fetch_assoc()):
                                 ?>
                                         <option value="<?= (int) $role['Committee_role_id'] ?>"
-                                            <?= ((string) ($form['Committee_role_id'] ?? '') === (string) $role['Committee_role_id']) ? 'selected' : '' ?>>
+                                            <?= ((int) ($form['Committee_role_id'] ?? 0) === (int) $role['Committee_role_id']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($role['Role_name']) ?>
                                         </option>
                                 <?php
@@ -153,7 +159,7 @@ $form = $assignment ?? [
                             <input type="date"
                                 class="form-input-custom"
                                 name="start_date"
-                                value="<?= htmlspecialchars($form['Assigned_date'] ?? '') ?>"
+                                value="<?= htmlspecialchars($assignedDate !== '' ? $assignedDate : date('Y-m-d')) ?>"
                                 required>
                         </div>
                     </div>

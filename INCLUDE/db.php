@@ -677,6 +677,120 @@ function getCommitteeUsers()
 }
 
 /**
+ * Committee members for assign/edit forms; always includes the current assignee.
+ */
+function getCommitteeUsersForAssignment(?int $includeUserId = null)
+{
+    global $conn;
+
+    if ($includeUserId !== null && $includeUserId > 0) {
+        $stmt = $conn->prepare(
+            "SELECT User_id, FullName, Student_id
+             FROM user
+             WHERE (role = 'committee' AND Is_active = 1) OR User_id = ?
+             ORDER BY FullName ASC"
+        );
+        if (!$stmt) {
+            return false;
+        }
+
+        $stmt->bind_param('i', $includeUserId);
+        $stmt->execute();
+
+        return $stmt->get_result();
+    }
+
+    return getCommitteeUsers();
+}
+
+function ensureClubMemberRecord(int $userId, int $clubId, string $joinedDate): void
+{
+    global $conn;
+
+    $memberStatus = 'Active';
+
+    $stmt = $conn->prepare(
+        'SELECT ClubMember_id FROM clubmember WHERE User_id = ? AND Club_id = ? LIMIT 1'
+    );
+    if (!$stmt) {
+        throw new Exception('Prepare failed (member lookup): ' . $conn->error);
+    }
+
+    $stmt->bind_param('ii', $userId, $clubId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result ? $result->fetch_assoc() : null;
+    $stmt->close();
+
+    if ($row) {
+        $memberId = (int) $row['ClubMember_id'];
+        $stmt = $conn->prepare(
+            'UPDATE clubmember SET Joined_date = ? WHERE ClubMember_id = ?'
+        );
+        if (!$stmt) {
+            throw new Exception('Prepare failed (member update): ' . $conn->error);
+        }
+
+        $stmt->bind_param('si', $joinedDate, $memberId);
+        if (!$stmt->execute()) {
+            throw new Exception('Member update failed: ' . $stmt->error);
+        }
+        $stmt->close();
+
+        return;
+    }
+
+    $nextMemberId = nextClubMemberId();
+    $stmt = $conn->prepare(
+        'INSERT INTO clubmember (ClubMember_id, User_id, Club_id, Joined_date, Status) VALUES (?, ?, ?, ?, ?)'
+    );
+    if (!$stmt) {
+        throw new Exception('Prepare failed (member insert): ' . $conn->error);
+    }
+
+    $stmt->bind_param('iiiss', $nextMemberId, $userId, $clubId, $joinedDate, $memberStatus);
+    if (!$stmt->execute()) {
+        throw new Exception('Member insert failed: ' . $stmt->error);
+    }
+    $stmt->close();
+}
+
+function removeClubMemberIfUnassigned(int $userId, int $clubId): void
+{
+    global $conn;
+
+    $stmt = $conn->prepare(
+        'SELECT 1 FROM clubcommittee WHERE User_id = ? AND Club_id = ? LIMIT 1'
+    );
+    if (!$stmt) {
+        throw new Exception('Prepare failed (assignment check): ' . $conn->error);
+    }
+
+    $stmt->bind_param('ii', $userId, $clubId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stillAssigned = $result && $result->num_rows > 0;
+    $stmt->close();
+
+    if ($stillAssigned) {
+        return;
+    }
+
+    $stmt = $conn->prepare(
+        'DELETE FROM clubmember WHERE User_id = ? AND Club_id = ?'
+    );
+    if (!$stmt) {
+        throw new Exception('Prepare failed (member delete): ' . $conn->error);
+    }
+
+    $stmt->bind_param('ii', $userId, $clubId);
+    if (!$stmt->execute()) {
+        throw new Exception('Member delete failed: ' . $stmt->error);
+    }
+    $stmt->close();
+}
+
+/**
  * Assign an existing committee user to a club.
  *
  * @return array{success:bool,message:string}
@@ -1244,6 +1358,23 @@ function updateClubCommittee(
         return ['success' => false, 'message' => 'This member is already assigned to the selected club.'];
     }
 
+    $stmt = $conn->prepare(
+        "SELECT role FROM user WHERE User_id = ? LIMIT 1"
+    );
+    if (!$stmt) {
+        return ['success' => false, 'message' => 'Database error: ' . $conn->error];
+    }
+
+    $stmt->bind_param('i', $userId);
+    $stmt->execute();
+    $userResult = $stmt->get_result();
+    $userRow = $userResult ? $userResult->fetch_assoc() : null;
+    $stmt->close();
+
+    if (!$userRow || strtolower((string) $userRow['role']) !== 'committee') {
+        return ['success' => false, 'message' => 'Selected user is not a committee member.'];
+    }
+
     $oldUserId = (int) $existing['User_id'];
     $oldClubId = (int) $existing['Club_id'];
 
@@ -1265,26 +1396,10 @@ function updateClubCommittee(
         }
         $stmt->close();
 
-        $stmt = $conn->prepare(
-            'UPDATE clubmember SET Joined_date = ?
-             WHERE User_id = ? AND Club_id = ?'
-        );
-        if ($stmt) {
-            $stmt->bind_param('sii', $startDate, $oldUserId, $oldClubId);
-            $stmt->execute();
-            $stmt->close();
-        }
+        ensureClubMemberRecord($userId, $clubId, $startDate);
 
         if ($oldUserId !== $userId || $oldClubId !== $clubId) {
-            $stmt = $conn->prepare(
-                'UPDATE clubmember SET User_id = ?, Club_id = ?, Joined_date = ?
-                 WHERE User_id = ? AND Club_id = ?'
-            );
-            if ($stmt) {
-                $stmt->bind_param('iisii', $userId, $clubId, $startDate, $oldUserId, $oldClubId);
-                $stmt->execute();
-                $stmt->close();
-            }
+            removeClubMemberIfUnassigned($oldUserId, $oldClubId);
         }
 
         $conn->commit();
