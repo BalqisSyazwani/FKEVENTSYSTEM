@@ -269,18 +269,11 @@ $reportsPageUrl = '../Module4/index.php';
 
                 <!-- PROFILE -->
                 <a href="/FKEVENTSYSTEM/Module1/profile.php">
-<<<<<<< HEAD
 
-=======
->>>>>>> 9e839b41486cef72535edbf0008d1603da3af96f
                     <i class="bi bi-person-circle"></i>
                     View Profile
                 </a>
-
-<<<<<<< HEAD
-                <!-- LOGOUT -->
-=======
->>>>>>> 9e839b41486cef72535edbf0008d1603da3af96f
+                <!-- TODO: Add logout button -->
                 <a href="/FKEVENTSYSTEM/Module1/login.php"
                     class="admin-logout-btn">
                     <i class="bi bi-box-arrow-right"></i>

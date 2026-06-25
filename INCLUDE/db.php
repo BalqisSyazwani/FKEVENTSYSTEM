@@ -102,26 +102,28 @@ function insertUser(
             $stmt_clubMember = $conn->prepare(
                 "INSERT INTO clubmember
                 (
+                    ClubMember_id,
                     User_id,
                     Club_id,
                     Joined_date,
-                    clubStatus,
-                    maxCapacity
+                    Status
                 )
-                VALUES (?, ?, ?, ?, ?, ?)"
+                VALUES (?, ?, ?, ?, ?)"
             );
 
             if (!$stmt_clubMember) {
                 throw new Exception("Prepare Failed (clubmember): " . $conn->error);
             }
 
+            $nextMemberId = nextClubMemberId();
+
             $stmt_clubMember->bind_param(
-                "iisisi",
+                "iiiss",
+                $nextMemberId,
                 $user_id,
                 $club_id,
                 $joined_date,
-                $clubStatus,
-                $maxCapacity
+                $clubStatus
             );
 
             if (!$stmt_clubMember->execute()) {
@@ -152,6 +154,18 @@ function getClubs()
     $result = $conn->query($sql);
 
     return $result;
+}
+
+function nextClubMemberId(): int
+{
+    global $conn;
+
+    $result = $conn->query('SELECT COALESCE(MAX(ClubMember_id), 0) + 1 AS next_id FROM clubmember');
+    if (!$result) {
+        return 1;
+    }
+
+    return (int) ($result->fetch_assoc()['next_id'] ?? 1);
 }
 
 /**
@@ -744,14 +758,16 @@ function assignClubCommittee(int $userId, int $clubId, int $committeeRoleId, str
         $stmt->close();
 
         if (!$memberExists) {
+            $nextMemberId = nextClubMemberId();
+
             $stmt = $conn->prepare(
-                'INSERT INTO clubmember (User_id, Club_id, Joined_date, Status) VALUES (?, ?, ?, ?)'
+                'INSERT INTO clubmember (ClubMember_id, User_id, Club_id, Joined_date, Status) VALUES (?, ?, ?, ?, ?)'
             );
             if (!$stmt) {
                 throw new Exception('Prepare failed (member): ' . $conn->error);
             }
 
-            $stmt->bind_param('iiss', $userId, $clubId, $startDate, $memberStatus);
+            $stmt->bind_param('iiiss', $nextMemberId, $userId, $clubId, $startDate, $memberStatus);
             if (!$stmt->execute()) {
                 throw new Exception('Member record failed: ' . $stmt->error);
             }
@@ -1009,19 +1025,16 @@ function joinClubAsStudent(int $userId, int $clubId): array
     $conn->begin_transaction();
 
     try {
+        $nextMemberId = nextClubMemberId();
+
         $stmt = $conn->prepare(
-            'INSERT INTO clubmember (User_id, Club_id, Joined_date, Status) VALUES (?, ?, ?, ?)'
+            'INSERT INTO clubmember (ClubMember_id, User_id, Club_id, Joined_date, Status) VALUES (?, ?, ?, ?, ?)'
         );
-        if (!$stmt) {
-            $stmt = $conn->prepare(
-                'INSERT INTO clubmember (User_id, Club_id, Joined_date, clubStatus) VALUES (?, ?, ?, ?)'
-            );
-        }
         if (!$stmt) {
             throw new Exception('Prepare failed (member): ' . $conn->error);
         }
 
-        $stmt->bind_param('iiss', $userId, $clubId, $joinedDate, $memberStatus);
+        $stmt->bind_param('iiiss', $nextMemberId, $userId, $clubId, $joinedDate, $memberStatus);
         if (!$stmt->execute()) {
             throw new Exception('Could not join club: ' . $stmt->error);
         }
